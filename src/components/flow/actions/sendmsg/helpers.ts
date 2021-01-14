@@ -3,8 +3,8 @@ import { getActionUUID } from 'components/flow/actions/helpers';
 import { Attachment, SendMsgFormState } from 'components/flow/actions/sendmsg/SendMsgForm';
 import { Types } from 'config/interfaces';
 import { MsgTemplating, SendMsg } from 'flowTypes';
-import { AssetStore, AssetType } from 'store/flowContext';
-import { AssetEntry, NodeEditorSettings, StringEntry } from 'store/nodeEditor';
+import { Asset, AssetStore, AssetType } from 'store/flowContext';
+import { AssetArrayEntry, AssetEntry, NodeEditorSettings, StringEntry } from 'store/nodeEditor';
 import { SelectOption } from 'components/form/select/SelectElement';
 import { createUUID } from 'utils';
 
@@ -54,6 +54,16 @@ export const initializeForm = (
       });
     }
 
+    let labels: AssetArrayEntry = { value: [] };
+
+    if (action.labels) {
+      labels = {
+        value: action.labels.map(label => {
+          return { id: label.uuid, name: label.name, type: AssetType.Label };
+        })
+      };
+    }
+
     return {
       topic: { value: TOPIC_OPTIONS.find(option => option.value === action.topic) },
       template,
@@ -63,6 +73,7 @@ export const initializeForm = (
       quickReplies: { value: action.quick_replies || [] },
       quickReplyEntry: { value: '' },
       sendAll: action.all_urns,
+      labels: labels,
       valid: true
     };
   }
@@ -76,6 +87,7 @@ export const initializeForm = (
     quickReplies: { value: [] },
     quickReplyEntry: { value: '' },
     sendAll: false,
+    labels: { value: [] },
     valid: false
   };
 };
@@ -116,6 +128,7 @@ export const stateToAction = (settings: NodeEditorSettings, state: SendMsgFormSt
     type: Types.send_msg,
     all_urns: state.sendAll,
     quick_replies: state.quickReplies.value,
+    labels: getAsset(state.labels.value!, AssetType.Label),
     uuid: getActionUUID(settings, Types.send_msg)
   };
 
@@ -128,4 +141,12 @@ export const stateToAction = (settings: NodeEditorSettings, state: SendMsgFormSt
   }
 
   return result;
+};
+
+export const getAsset = (assets: Asset[], type: AssetType): any[] => {
+  return assets
+    .filter((asset: Asset) => asset.type === type)
+    .map((asset: Asset) => {
+      return { uuid: asset.id, name: asset.name };
+    });
 };
