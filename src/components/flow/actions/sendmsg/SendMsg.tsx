@@ -4,6 +4,9 @@ import * as React from 'react';
 
 import styles from './SendMsg.module.scss';
 import i18n from 'config/i18n';
+import { renderAssetList } from '../helpers';
+import { AssetType } from '../../../../store/flowContext';
+import { MAX_TO_SHOW } from '../addlabels/AddLabels';
 
 export const PLACEHOLDER = i18n.t('actions.send_msg.placeholder', 'Send a message to the contact');
 
@@ -36,6 +39,21 @@ const SendMsgComp: React.SFC<SendMsg> = (action: SendMsg): JSX.Element => {
               {line}
             </div>
           ))}
+
+          <br />
+
+          {renderAssetList(
+            action.labels.map(label => {
+              return {
+                id: label.uuid,
+                name: label.name,
+                type: AssetType.Label
+              };
+            }),
+            MAX_TO_SHOW,
+            null
+          )}
+
           {action.attachments && action.attachments.length > 0 ? (
             <div className={`${styles.attachment} fe-paperclip`} />
           ) : null}
