@@ -144,9 +144,13 @@ export const stateToAction = (settings: NodeEditorSettings, state: SendMsgFormSt
 };
 
 export const getAsset = (assets: Asset[], type: AssetType): any[] => {
-  return assets
-    .filter((asset: Asset) => asset.type === type)
-    .map((asset: Asset) => {
-      return { uuid: asset.id, name: asset.name };
-    });
+  if (assets) {
+    return assets
+      .filter((asset: Asset) => asset.type === type)
+      .map((asset: Asset) => {
+        return { uuid: asset.id, name: asset.name };
+      });
+  }
+
+  return [];
 };
