@@ -32,8 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom-fourteen",
     "tester": "react-scripts test --env=jest-environment-happy-dom",
-    "eject": "react-scripts eject",
-    "prepare": "npm run build"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [
