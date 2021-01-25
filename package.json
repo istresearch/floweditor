@@ -8,6 +8,9 @@
   "unpkg": "umd/flow-editor.min.js",
   "author": "Nyaruka <code@nyaruka.com>",
   "homepage": "./",
+  "files": [
+    "build"
+  ],
   "private": false,
   "dependencies": {
     "react": "^16.8.6",
