@@ -332,6 +332,7 @@ export interface SendMsg extends Action {
   attachments?: string[];
   topic?: string;
   templating?: MsgTemplating;
+  labels?: Label[];
 }
 
 export interface SayMsg extends Action {
