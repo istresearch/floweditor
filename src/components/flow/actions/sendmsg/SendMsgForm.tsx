@@ -618,8 +618,6 @@ export default class SendMsgForm extends React.Component<ActionFormProps, SendMs
       tabs.splice(0, 0, templates);
     }
 
-    console.log(this.state.labels);
-
     return (
       <Dialog
         title={typeConfig.name}

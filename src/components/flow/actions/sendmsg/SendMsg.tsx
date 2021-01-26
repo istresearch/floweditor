@@ -40,19 +40,19 @@ const SendMsgComp: React.SFC<SendMsg> = (action: SendMsg): JSX.Element => {
             </div>
           ))}
 
-          <br />
-
-          {renderAssetList(
-            action.labels.map(label => {
-              return {
-                id: label.uuid,
-                name: label.name,
-                type: AssetType.Label
-              };
-            }),
-            MAX_TO_SHOW,
-            null
-          )}
+          {action.labels
+            ? renderAssetList(
+                action.labels.map(label => {
+                  return {
+                    id: label.uuid,
+                    name: label.name,
+                    type: AssetType.Label
+                  };
+                }),
+                MAX_TO_SHOW,
+                null
+              )
+            : null}
 
           {action.attachments && action.attachments.length > 0 ? (
             <div className={`${styles.attachment} fe-paperclip`} />
