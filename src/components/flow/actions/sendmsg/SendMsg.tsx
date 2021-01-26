@@ -54,6 +54,8 @@ const SendMsgComp: React.SFC<SendMsg> = (action: SendMsg): JSX.Element => {
               )
             : null}
 
+          <br />
+
           {action.attachments && action.attachments.length > 0 ? (
             <div className={`${styles.attachment} fe-paperclip`} />
           ) : null}
