@@ -1,4 +1,3 @@
-.*
 !.storybook/
 node_modules/
 umd/
@@ -13,3 +12,4 @@ report.html
 lambda-build
 lib
 build
+.idea

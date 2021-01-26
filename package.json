@@ -8,9 +8,6 @@
   "unpkg": "umd/flow-editor.min.js",
   "author": "Nyaruka <code@nyaruka.com>",
   "homepage": "./",
-  "files": [
-    "build"
-  ],
   "private": false,
   "dependencies": {
     "react": "^16.8.6",
@@ -32,7 +29,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom-fourteen",
     "tester": "react-scripts test --env=jest-environment-happy-dom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare":  "npm run build"
   },
   "browserslist": {
     "production": [
@@ -67,6 +65,8 @@
     ]
   },
   "devDependencies": {
+    "babel-loader": "8.1.0",
+    "webpack": "4.42.0",
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "7.0.0",
