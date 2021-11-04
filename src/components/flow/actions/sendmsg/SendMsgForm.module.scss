@@ -9,45 +9,6 @@
   position: relative;
 }
 
-.type_choice {
-  display: inline-block;
-  width: 180px;
-}
-
-.url_attachment {
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-
-  .upload {
-    vertical-align: super;
-  }
-
-  .remove_upload {
-    display: inline-block;
-    margin-left: 8px;
-  }
-
-  .url {
-    display: inline-block;
-    margin-left: 8px;
-    margin-bottom: -15px;
-    width: 329px;
-    margin-right: 10px;
-    input {
-      vertical-align: top;
-      height: 28px !important;
-      margin-top: -11px;
-      width: 100%;
-      font-size: 12px;
-    }
-  }
-
-  .remove {
-    vertical-align: super;
-    display: inline-block;
-  }
-}
 
 .existing_quick_replies {
   padding: 5px;
@@ -74,4 +35,8 @@
 
 .variable {
   margin-bottom: 6px;
+}
+
+temba-completion {
+  --textarea-height: 120px;
 }

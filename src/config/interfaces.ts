@@ -1,8 +1,16 @@
 export enum FlowTypes {
-  MESSAGE = 'message',
+  MESSAGING = 'messaging',
+  MESSAGING_BACKGROUND = 'messaging_background',
+  MESSAGING_OFFLINE = 'messaging_offline',
   VOICE = 'voice',
-  SURVEY = 'message_offline',
   NONE = '-'
+}
+
+export enum ContactStatus {
+  ACTIVE = 'active',
+  BLOCKED = 'blocked',
+  STOPPED = 'stopped',
+  ARCHIVED = 'archived'
 }
 
 export enum Types {
@@ -15,6 +23,7 @@ export enum Types {
   set_contact_field = 'set_contact_field',
   set_contact_name = 'set_contact_name',
   set_contact_language = 'set_contact_language',
+  set_contact_status = 'set_contact_status',
   set_run_result = 'set_run_result',
   call_classifier = 'call_classifier',
   call_resthook = 'call_resthook',
@@ -41,6 +50,7 @@ export enum Types {
   split_by_webhook = 'split_by_webhook',
   wait_for_response = 'wait_for_response',
   wait_for_menu = 'wait_for_menu',
+  wait_for_dial = 'wait_for_dial',
   wait_for_digits = 'wait_for_digits',
   wait_for_audio = 'wait_for_audio',
   wait_for_video = 'wait_for_video',
@@ -132,8 +142,22 @@ export interface OperatorMap {
   [propName: string]: Operator;
 }
 
-export const HIDDEN = [FlowTypes.NONE];
-export const VOICE = [FlowTypes.VOICE];
-export const SURVEY = [FlowTypes.SURVEY];
-export const TEXT_TYPES = [FlowTypes.MESSAGE, FlowTypes.SURVEY];
-export const ONLINE = [FlowTypes.MESSAGE, FlowTypes.VOICE];
+export const VISIBILITY_MESSAGING = [
+  FlowTypes.MESSAGING,
+  FlowTypes.MESSAGING_BACKGROUND,
+  FlowTypes.MESSAGING_OFFLINE
+];
+export const VISIBILITY_MESSAGING_INTERACTIVE = [FlowTypes.MESSAGING, FlowTypes.MESSAGING_OFFLINE];
+export const VISIBILITY_VOICE = [FlowTypes.VOICE];
+export const VISIBILITY_ONLINE = [
+  FlowTypes.MESSAGING,
+  FlowTypes.MESSAGING_BACKGROUND,
+  FlowTypes.VOICE
+];
+export const VISIBILITY_INTERACTIVE = [
+  FlowTypes.MESSAGING,
+  FlowTypes.MESSAGING_OFFLINE,
+  FlowTypes.VOICE
+];
+export const VISIBILITY_SURVEYOR = [FlowTypes.MESSAGING_OFFLINE];
+export const VISIBILITY_HIDDEN = [FlowTypes.NONE];

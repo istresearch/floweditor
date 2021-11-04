@@ -2,11 +2,11 @@ import { react as bindCallbacks } from 'auto-bind';
 import Dialog, { ButtonSet, Tab } from 'components/dialog/Dialog';
 import { hasErrors, renderIssues } from 'components/flow/actions/helpers';
 import { RouterFormProps } from 'components/flow/props';
-import { nodeToState, stateToNode, createEmptyCase } from './helpers';
+import { nodeToState, stateToNode } from './helpers';
 import { createResultNameInput } from 'components/flow/routers/widgets';
 import TypeList from 'components/nodeeditor/TypeList';
 import * as React from 'react';
-import { FormState, mergeForm, StringEntry, AssetEntry } from 'store/nodeEditor';
+import { FormState, mergeForm, StringEntry, FormEntry } from 'store/nodeEditor';
 import {
   Alphanumeric,
   Required,
@@ -28,7 +28,7 @@ import i18n from 'config/i18n';
 export interface ClassifyRouterFormState extends FormState {
   hiddenCases: CaseProps[];
   resultName: StringEntry;
-  classifier: AssetEntry;
+  classifier: FormEntry;
   cases: CaseProps[];
   operand: StringEntry;
 }
@@ -47,9 +47,14 @@ export default class ClassifyRouterForm extends React.Component<
 
     // we need to resolve our classifier for intent selection
     if (this.state.classifier.value) {
-      fetchAsset(this.props.assetStore.classifiers, this.state.classifier.value.id).then(
+      // TODO: don't use asset as intermediary now that AssetSelector deals in native options
+      fetchAsset(this.props.assetStore.classifiers, this.state.classifier.value.uuid).then(
         (classifier: Asset) => {
-          this.handleUpdate({ classifier });
+          if (classifier) {
+            this.handleUpdate({
+              classifier: { ...this.state.classifier.value, ...classifier.content }
+            });
+          }
         }
       );
     }
@@ -58,7 +63,7 @@ export default class ClassifyRouterForm extends React.Component<
   private handleUpdate(
     keys: {
       resultName?: string;
-      classifier?: Asset;
+      classifier?: any;
     },
     submitting = false
   ): boolean {
@@ -209,7 +214,6 @@ export default class ClassifyRouterForm extends React.Component<
             cases={this.state.cases}
             onCasesUpdated={this.handleCasesUpdated}
             operators={intentOperatorList}
-            createEmptyCase={createEmptyCase}
             classifier={this.state.classifier.value}
           />
         )}

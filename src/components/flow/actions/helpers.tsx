@@ -111,7 +111,7 @@ export const getRecipients = (action: RecipientsAction): Asset[] => {
 
   selected = selected.concat(
     (action.legacy_vars || []).map((expression: string) => {
-      return { id: expression, name: expression, type: AssetType.Expression, missing: false };
+      return { name: expression, value: expression, expression: true };
     })
   );
 
@@ -186,7 +186,7 @@ export const renderAsset = (asset: Asset, endpoints: Endpoints) => {
     case AssetType.Ticketer:
       assetBody = (
         <Trans i18nKey="assets.ticketer" values={{ name: asset.name }}>
-          Using [[name]] service
+          Open a new Ticket on [[name]]
         </Trans>
       );
       break;
@@ -197,7 +197,7 @@ export const renderAsset = (asset: Asset, endpoints: Endpoints) => {
   }
 
   return (
-    <div className={`${shared.node_asset}`} key={asset.id}>
+    <div className={`${shared.node_asset}`} key={asset.id || (asset as any).value}>
       {assetBody}
     </div>
   );
@@ -211,11 +211,16 @@ export const hasErrors = (entry: FormEntry): boolean => {
   return getAllErrors(entry).length > 0;
 };
 
-export const getExpressions = (assets: Asset[]): any[] => {
+export const getAllErrorMessages = (entry: FormEntry): string[] => {
+  const errors = getAllErrors(entry).map((failure: ValidationFailure) => failure.message);
+  return errors;
+};
+
+export const getExpressions = (assets: any[]): any[] => {
   return assets
-    .filter((asset: Asset) => asset.type === AssetType.Expression)
-    .map((asset: Asset) => {
-      return asset.id;
+    .filter((asset: any) => asset.expression)
+    .map((asset: any) => {
+      return asset.value;
     });
 };
 

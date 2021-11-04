@@ -50,7 +50,8 @@
 .wait_for_location,
 .wait_for_menu,
 .wait_for_digits,
-.wait_for_response {
+.wait_for_response,
+.wait_for_dial {
   background: $dark_blue;
 }
 
@@ -89,6 +90,7 @@
 .set_contact_name,
 .set_contact_field,
 .set_contact_language,
+.set_contact_status,
 .set_contact_channel {
   background: $teal;
 }

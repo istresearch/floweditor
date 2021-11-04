@@ -6,7 +6,7 @@ import { nodeToState, stateToNode } from './helpers';
 import { createResultNameInput } from 'components/flow/routers/widgets';
 import TypeList from 'components/nodeeditor/TypeList';
 import * as React from 'react';
-import { FormState, mergeForm, StringEntry, AssetEntry } from 'store/nodeEditor';
+import { FormState, mergeForm, StringEntry, FormEntry } from 'store/nodeEditor';
 import {
   Alphanumeric,
   Required,
@@ -16,13 +16,12 @@ import {
 } from 'store/validators';
 import AssetSelector from 'components/form/assetselector/AssetSelector';
 import { Asset } from 'store/flowContext';
-import { fetchAsset } from 'external';
 import styles from './TicketRouterForm.module.scss';
 import i18n from 'config/i18n';
 import TextInputElement from 'components/form/textinput/TextInputElement';
 
 export interface TicketRouterFormState extends FormState {
-  ticketer: AssetEntry;
+  ticketer: FormEntry;
   subject: StringEntry;
   body: StringEntry;
   resultName: StringEntry;
@@ -35,21 +34,15 @@ export default class TicketRouterForm extends React.Component<
   constructor(props: RouterFormProps) {
     super(props);
 
-    this.state = nodeToState(this.props.nodeSettings);
+    // if we only have one ticketer, initialize our form with it
+    const ticketers = Object.values(this.props.assetStore.ticketers.items);
+    const ticketer = ticketers.length === 1 ? ticketers[0] : null;
+    this.state = nodeToState(this.props.nodeSettings, ticketer);
+
     bindCallbacks(this, {
       include: [/^handle/]
     });
-
-    // we need to resolve our ticketer asset
-    if (this.state.ticketer.value) {
-      fetchAsset(this.props.assetStore.ticketers, this.state.ticketer.value.id).then(
-        (ticketer: Asset) => {
-          this.handleUpdate({ ticketer });
-        }
-      );
-    }
   }
-
   private handleUpdate(
     keys: {
       ticketer?: Asset;
@@ -144,32 +137,34 @@ export default class TicketRouterForm extends React.Component<
     };
   }
 
-  private dialog: Dialog;
-
   private renderEdit(): JSX.Element {
     const typeConfig = this.props.typeConfig;
 
+    // if we only have one ticketer or we have issues, show the ticket chooser
+    const showTicketers =
+      Object.keys(this.props.assetStore.ticketers.items).length > 1 || this.props.issues.length > 0;
+
     return (
-      <Dialog
-        title={typeConfig.name}
-        headerClass={typeConfig.type}
-        buttons={this.getButtons()}
-        ref={ele => {
-          this.dialog = ele;
-        }}
-      >
+      <Dialog title={typeConfig.name} headerClass={typeConfig.type} buttons={this.getButtons()}>
         <TypeList __className="" initialType={typeConfig} onChange={this.props.onTypeChange} />
-        <p>
-          <span>Open ticket via... </span>
-        </p>
-        <AssetSelector
-          key="select_ticketer"
-          name={i18n.t('forms.ticketer', 'Ticketer')}
-          placeholder="Select the ticketing service to use"
-          assets={this.props.assetStore.ticketers}
-          onChange={this.handleTicketerUpdate}
-          entry={this.state.ticketer}
-        />
+        {showTicketers ? (
+          <div>
+            <p>
+              <span>Open ticket via... </span>
+            </p>
+            <AssetSelector
+              key="select_ticketer"
+              name={i18n.t('forms.ticketer', 'Ticketer')}
+              placeholder="Select the ticketing service to use"
+              assets={this.props.assetStore.ticketers}
+              onChange={this.handleTicketerUpdate}
+              entry={this.state.ticketer}
+            />
+          </div>
+        ) : (
+          ''
+        )}
+
         <div className={styles.subject}>
           <TextInputElement
             name={i18n.t('forms.subject', 'Subject')}

@@ -375,8 +375,8 @@ export const createEmptyNode = (
 
   let type = Types.execute_actions;
 
-  // Add an action next if we are coming from a router
-  if (!fromNode || hasRouter(fromNode)) {
+  // Add an action next if 1) this is first node, 2) we are coming from a router or 3) this is a background flow
+  if (!fromNode || hasRouter(fromNode) || flowType === FlowTypes.MESSAGING_BACKGROUND) {
     const replyType = flowType === FlowTypes.VOICE ? Types.say_msg : Types.send_msg;
     const replyAction = {
       uuid: createUUID(),
@@ -558,11 +558,13 @@ export const getFlowComponents = (definition: FlowDefinition): FlowComponents =>
 
         /* istanbul ignore else */
         if (category) {
-          groups[groupUUID] = {
-            name: category.name,
-            id: groupUUID,
-            type: AssetType.Group
-          };
+          if (groupUUID) {
+            groups[groupUUID] = {
+              name: category.name,
+              id: groupUUID,
+              type: AssetType.Group
+            };
+          }
         }
       }
     }
@@ -572,11 +574,13 @@ export const getFlowComponents = (definition: FlowDefinition): FlowComponents =>
         const groupsToChange = (action as ChangeGroups).groups;
         if (groupsToChange) {
           for (const group of groupsToChange) {
-            groups[group.uuid] = {
-              name: group.name,
-              id: group.uuid,
-              type: AssetType.Group
-            };
+            if (group.uuid) {
+              groups[group.uuid] = {
+                name: group.name,
+                id: group.uuid,
+                type: AssetType.Group
+              };
+            }
           }
         }
       } else if (action.type === Types.set_contact_field) {
