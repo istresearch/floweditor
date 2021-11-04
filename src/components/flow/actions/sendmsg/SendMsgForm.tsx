@@ -29,7 +29,6 @@ import {
   StringArrayEntry,
   StringEntry,
   SelectOptionEntry,
-  AssetArrayEntry,
   FormEntry
 } from 'store/nodeEditor';
 import { MaxOfTenItems, Required, shouldRequireIf, validate } from 'store/validators';
@@ -54,7 +53,7 @@ export interface SendMsgFormState extends FormState {
   topic: SelectOptionEntry;
   templateVariables: StringEntry[];
   templateTranslation?: TemplateTranslation;
-  labels: AssetArrayEntry;
+  labels: any;
 }
 
 export default class SendMsgForm extends React.Component<ActionFormProps, SendMsgFormState> {
