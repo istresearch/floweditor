@@ -449,6 +449,7 @@ export default class SendMsgForm extends React.Component<ActionFormProps, SendMs
           entry={this.state.labels}
           searchable={true}
           multi={true}
+          expressions={true}
           onChange={this.handleLabelsChanged}
           createPrefix={i18n.t('create_label', 'Create Label') + ': '}
           createAssetFromInput={this.handleCreateAssetFromInput}
