@@ -71,6 +71,7 @@ export interface EventProps {
   service?: string;
   classifier?: { uuid: string; name: string };
   ticketer?: { uuid: string; name: string };
+  ticket?: { subject: string; body: string };
 }
 
 interface FlowEvent {
@@ -133,6 +134,34 @@ const renderAttachment = (attachment: string): JSX.Element => {
       );
     } else if (type.startsWith('image')) {
       return <img src={url} alt="Attachment" />;
+    } else if (type.startsWith('application')) {
+      return (
+        <div
+          onClick={() => {
+            window.open(url);
+          }}
+          style={{
+            cursor: 'pointer',
+            textDecoration: 'none',
+            padding: '10px 12px',
+            background: '#e6e6e6',
+            color: '#666'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div
+              className="fe-document-file-pdf"
+              style={{
+                textDecoration: 'none',
+                fontSize: '20px'
+              }}
+            />
+            <div style={{ marginLeft: '5px', lineHeight: '16px' }}>
+              {i18n.t('document', 'Document')}
+            </div>
+          </div>
+        </div>
+      );
     } else if (type.startsWith('geo')) {
       return <img src={MAP_THUMB} alt="Attachment" />;
     } else if (type.startsWith('video')) {
@@ -148,19 +177,23 @@ const renderAttachment = (attachment: string): JSX.Element => {
 
 const renderMessage = (text: string, attachments: string[], direction: Direction): JSX.Element => {
   const attaches = attachments || [];
+
   return (
     <div className={getStyleForDirection(direction)}>
       {attaches.map((attachment: string) => (
         <div key={text + attachment}>{renderAttachment(attachment)}</div>
       ))}
       {text
-        ? text.split('\n').map((item, key) => {
-            return (
-              <div key={createUUID()} className={styles.msg_text}>
-                {item}
-              </div>
-            );
-          })
+        ? text
+            .trim()
+            .split('\n')
+            .map((item, key) => {
+              return (
+                <div key={createUUID()} className={styles.msg_text}>
+                  {item}
+                </div>
+              );
+            })
         : null}
     </div>
   );
@@ -198,21 +231,27 @@ export default class LogEvent extends React.Component<EventProps, LogEventState>
   private renderGroupsChanged(): JSX.Element {
     let parts: string[] = [];
     if (this.props.groups_added) {
-      const info = i18n.t('simulator.added_to_group', 'Added to ');
-      parts.push(info + this.renderValueList(this.props.groups_added.map(group => group.name)));
+      const info = i18n.t('simulator.added_to_group', 'Added to');
+      parts.push(
+        info + ' ' + this.renderValueList(this.props.groups_added.map(group => group.name))
+      );
     }
     if (this.props.groups_removed) {
-      const info = i18n.t('simulator.removed_from_group', 'Removed from ');
-      parts.push(info + this.renderValueList(this.props.groups_removed.map(group => group.name)));
+      const info = i18n.t('simulator.removed_from_group', 'Removed from');
+      parts.push(
+        info + ' ' + this.renderValueList(this.props.groups_removed.map(group => group.name))
+      );
     }
 
     return renderInfo(parts.join('. '));
   }
 
   private renderLabelsAdded(): JSX.Element {
-    let info = i18n.t('simulator.input_labels_added', 'Message labeled with ');
+    let info = i18n.t('simulator.input_labels_added', 'Message labeled with');
 
-    return renderInfo(info + this.renderValueList(this.props.labels.map(label => label.name)));
+    return renderInfo(
+      info + ' ' + this.renderValueList(this.props.labels.map(label => label.name))
+    );
   }
 
   private renderEmailSent(): JSX.Element {
@@ -412,6 +451,12 @@ export default class LogEvent extends React.Component<EventProps, LogEventState>
             language: this.props.language
           })
         );
+      case 'contact_status_changed':
+        return renderInfo(
+          i18n.t('simulator.contact_status_changed', 'Set status to "[[status]]"', {
+            status: this.props.status
+          })
+        );
       case 'info':
         return renderInfo(this.props.text);
       case 'input_labels_added':
@@ -421,7 +466,7 @@ export default class LogEvent extends React.Component<EventProps, LogEventState>
       case 'ticket_opened':
         return renderInfo(
           i18n.t('simulator.ticket_opened', 'Ticket opened with subject "[[subject]]"', {
-            subject: this.props.subject
+            subject: this.props.ticket.subject
           })
         );
       case 'airtime_transferred':

@@ -1,25 +1,26 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { getActionUUID } from 'components/flow/actions/helpers';
-import { Attachment, SendMsgFormState } from 'components/flow/actions/sendmsg/SendMsgForm';
+import { SendMsgFormState } from 'components/flow/actions/sendmsg/SendMsgForm';
 import { Types } from 'config/interfaces';
-import { MsgTemplating, SendMsg } from 'flowTypes';
-import { Asset, AssetStore, AssetType } from 'store/flowContext';
-import { AssetArrayEntry, AssetEntry, NodeEditorSettings, StringEntry } from 'store/nodeEditor';
+import { Label, MsgTemplating, SendMsg } from 'flowTypes';
+import { AssetStore } from 'store/flowContext';
+import { FormEntry, NodeEditorSettings, StringEntry } from 'store/nodeEditor';
 import { SelectOption } from 'components/form/select/SelectElement';
 import { createUUID } from 'utils';
+import { Attachment } from './attachments';
 
 export const TOPIC_OPTIONS: SelectOption[] = [
-  { value: 'event', label: 'Event' },
-  { value: 'account', label: 'Account' },
-  { value: 'purchase', label: 'Purchase' },
-  { value: 'agent', label: 'Agent' }
+  { value: 'event', name: 'Event' },
+  { value: 'account', name: 'Account' },
+  { value: 'purchase', name: 'Purchase' },
+  { value: 'agent', name: 'Agent' }
 ];
 
 export const initializeForm = (
   settings: NodeEditorSettings,
   assetStore: AssetStore
 ): SendMsgFormState => {
-  let template: AssetEntry = { value: null };
+  let template: FormEntry = { value: null };
   let templateVariables: StringEntry[] = [];
 
   if (settings.originalAction && settings.originalAction.type === Types.send_msg) {
@@ -42,9 +43,8 @@ export const initializeForm = (
       const msgTemplate = action.templating.template;
       template = {
         value: {
-          id: msgTemplate.uuid,
-          name: msgTemplate.name,
-          type: AssetType.Template
+          uuid: msgTemplate.uuid,
+          name: msgTemplate.name
         }
       };
       templateVariables = action.templating.variables.map((value: string) => {
@@ -54,14 +54,8 @@ export const initializeForm = (
       });
     }
 
-    let labels: AssetArrayEntry = { value: [] };
-
-    if (action.labels) {
-      labels = {
-        value: action.labels.map(label => {
-          return { id: label.uuid, name: label.name, type: AssetType.Label };
-        })
-      };
+    if (!action.labels) {
+      action.labels = [];
     }
 
     return {
@@ -73,7 +67,14 @@ export const initializeForm = (
       quickReplies: { value: action.quick_replies || [] },
       quickReplyEntry: { value: '' },
       sendAll: action.all_urns,
-      labels: labels,
+      labels: {
+        value: action.labels.map((label: Label) => {
+          if (label.name_match) {
+            return { name: label.name_match, expression: true };
+          }
+          return label;
+        })
+      },
       valid: true
     };
   }
@@ -115,7 +116,7 @@ export const stateToAction = (settings: NodeEditorSettings, state: SendMsgFormSt
     templating = {
       uuid: templatingUUID,
       template: {
-        uuid: state.template.value.id,
+        uuid: state.template.value.uuid,
         name: state.template.value.name
       },
       variables: state.templateVariables.map((variable: StringEntry) => variable.value)
@@ -128,7 +129,12 @@ export const stateToAction = (settings: NodeEditorSettings, state: SendMsgFormSt
     type: Types.send_msg,
     all_urns: state.sendAll,
     quick_replies: state.quickReplies.value,
-    labels: getAsset(state.labels.value!, AssetType.Label),
+    labels: state.labels.value.map((label: any) => {
+      if (label.expression) {
+        return { name_match: label.name };
+      }
+      return label;
+    }),
     uuid: getActionUUID(settings, Types.send_msg)
   };
 
@@ -141,16 +147,4 @@ export const stateToAction = (settings: NodeEditorSettings, state: SendMsgFormSt
   }
 
   return result;
-};
-
-export const getAsset = (assets: Asset[], type: AssetType): any[] => {
-  if (assets) {
-    return assets
-      .filter((asset: Asset) => asset.type === type)
-      .map((asset: Asset) => {
-        return { uuid: asset.id, name: asset.name };
-      });
-  }
-
-  return [];
 };

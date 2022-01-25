@@ -19,6 +19,7 @@ import AppState from 'store/state';
 import { DispatchWithState, MergeEditorState } from 'store/thunks';
 import { createUUID } from 'utils';
 import { PopTabType } from 'config/interfaces';
+import i18n from 'config/i18n';
 
 const MESSAGE_DELAY_MS = 200;
 
@@ -145,6 +146,7 @@ interface Session {
   contact: Contact;
   input?: any;
   wait?: Wait;
+  status?: string;
 }
 
 /**
@@ -206,6 +208,8 @@ export class Simulator extends React.Component<SimulatorProps, SimulatorState> {
 
   private updateActivity(recentMessages: { [key: string]: RecentMessage[] } = {}): void {
     if (this.state.session) {
+      // if we are resetting, clear our recent messages
+
       let lastExit: string = null;
       const paths: { [key: string]: number } = {};
       const active: { [nodeUUID: string]: number } = {};
@@ -222,17 +226,32 @@ export class Simulator extends React.Component<SimulatorProps, SimulatorState> {
               pathCount = 0;
             }
             paths[key] = ++pathCount;
+            if (!(key in recentMessages)) {
+              recentMessages[key] = [];
+            }
           }
           lastExit = step.exit_uuid;
           finalStep = step;
         }
 
-        if (run.status === 'waiting' && finalStep) {
+        if (finalStep) {
           let count = active[finalStep.node_uuid];
           if (!count) {
             count = 0;
           }
-          active[finalStep.node_uuid] = ++count;
+
+          if (lastExit) {
+            const lastKey = lastExit + ':' + null;
+            paths[lastKey] = 1;
+
+            if (!(lastKey in recentMessages)) {
+              recentMessages[lastKey] = [];
+            }
+          }
+
+          if (this.state.session.status === 'waiting') {
+            active[finalStep.node_uuid] = ++count;
+          }
           activeFlow = run.flow_uuid;
         }
       }
@@ -255,7 +274,6 @@ export class Simulator extends React.Component<SimulatorProps, SimulatorState> {
       };
 
       this.props.mergeEditorState({ activity });
-
       if (activeFlow && activeFlow !== this.currentFlow) {
         this.currentFlow = activeFlow;
       }
@@ -289,21 +307,20 @@ export class Simulator extends React.Component<SimulatorProps, SimulatorState> {
             const path = session.runs[i].path;
 
             // start at the penultimate node since we have nowhere to render recent messages for the last node
-            for (let j = path.length - 2; j >= 0; j--) {
+            for (let j = path.length - 1; j >= 0; j--) {
               if (path[j].uuid === event.step_uuid) {
                 fromUUID = path[j].exit_uuid;
-                toUUID = path[j + 1].node_uuid;
+                toUUID = path.length > j + 1 ? path[j + 1].node_uuid : null;
                 break;
               }
             }
 
-            if (fromUUID && toUUID) {
+            if (fromUUID) {
               const key = `${fromUUID}:${toUUID}`;
               const msg: RecentMessage = {
                 sent: event.created_on,
                 text: event.msg.text
               };
-
               if (key in recentMessages) {
                 recentMessages[key].unshift(msg);
               } else {
@@ -388,7 +405,7 @@ export class Simulator extends React.Component<SimulatorProps, SimulatorState> {
             $push: [
               {
                 type: 'info',
-                text: 'Exited flow',
+                text: i18n.t('simulator.flow_exited', 'Exited flow'),
                 created_on: new Date()
               } as any
             ]
@@ -987,7 +1004,11 @@ export class Simulator extends React.Component<SimulatorProps, SimulatorState> {
                   type="text"
                   onKeyUp={this.onKeyUp}
                   disabled={this.state.sprinting}
-                  placeholder={this.state.active ? 'Enter message' : 'Press home to start again'}
+                  placeholder={
+                    this.state.active
+                      ? i18n.t('simulator.prompt.message', 'Enter message')
+                      : i18n.t('simulator.prompt.restart', 'Press home to start again')
+                  }
                 />
                 <div className={styles.show_attachments_button}>
                   <div
@@ -1045,9 +1066,7 @@ export class Simulator extends React.Component<SimulatorProps, SimulatorState> {
         <div className={styles.simulator_tab + ' ' + tabHidden} onClick={this.onToggle}>
           <div className={styles.simulator_tab_icon + ' fe-smartphone'} />
           <div className={styles.simulator_tab_text}>
-            Run in
-            <br />
-            Simulator
+            {i18n.t('simulator.label', 'Run in Simulator')}
           </div>
         </div>
       </div>

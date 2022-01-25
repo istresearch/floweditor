@@ -39,6 +39,7 @@ import { ClickHandler, createClickHandler } from 'utils';
 import styles from './Node.module.scss';
 import { hasIssues } from '../helpers';
 import MountScroll from 'components/mountscroll/MountScroll';
+import i18n from 'config/i18n';
 
 export interface NodePassedProps {
   nodeUUID: string;
@@ -46,11 +47,7 @@ export interface NodePassedProps {
   plumberRecalculate: (id: string) => void;
   plumberMakeSource: (id: string) => void;
   plumberRemove: (id: string) => void;
-  plumberConnectExit: (
-    node: FlowNode,
-    exit: Exit,
-    onConnection: (activityId: string, recentMessagesId: string) => void
-  ) => void;
+  plumberConnectExit: (node: FlowNode, exit: Exit) => void;
   plumberUpdateClass: (
     node: FlowNode,
     exit: Exit,
@@ -332,7 +329,7 @@ export class NodeComp extends React.PureComponent<NodeProps> {
       if (resultName) {
         summary = (
           <div {...this.events} className={styles.save_result}>
-            <div className={styles.save_as}>Save as </div>
+            <div className={styles.save_as}>{i18n.t('forms.save_as', 'Save as')} </div>
             <div className={styles.result_name}>{resultName}</div>
           </div>
         );
@@ -401,7 +398,7 @@ export class NodeComp extends React.PureComponent<NodeProps> {
     const body = (
       <div className={styles.node}>
         {this.isStartNodeVisible() ? (
-          <div className={styles.flow_start_message}>Flow Start</div>
+          <div className={styles.flow_start_message}>{i18n.t('flow_start', 'Flow Start')}</div>
         ) : null}
 
         {uuid}

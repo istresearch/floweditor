@@ -1,10 +1,12 @@
 import { getLanguageForCode } from 'components/flow/actions/updatecontact/helpers';
+import i18n from 'config/i18n';
 import { Types } from 'config/interfaces';
 import {
   SetContactAttribute,
   SetContactChannel,
   SetContactLanguage,
-  SetContactName
+  SetContactName,
+  SetContactStatus
 } from 'flowTypes';
 import * as React from 'react';
 import { emphasize } from 'utils';
@@ -24,7 +26,11 @@ export const renderSetText = (
       </div>
     );
   } else {
-    return <div>Clear {withEmph(name, emphasizeName)}.</div>;
+    return (
+      <div>
+        {i18n.t('forms.clear', 'Clear')} {withEmph(name, emphasizeName)}.
+      </div>
+    );
   }
 };
 
@@ -37,7 +43,11 @@ const UpdateContactComp: React.SFC<SetContactAttribute> = (
 
   if (action.type === Types.set_contact_channel) {
     const setContactAction = action as SetContactChannel;
-    return renderSetText('channel', setContactAction.channel.name, false);
+    return renderSetText(
+      'channel',
+      setContactAction.channel ? setContactAction.channel.name : null,
+      false
+    );
   }
 
   if (action.type === Types.set_contact_language) {
@@ -47,6 +57,10 @@ const UpdateContactComp: React.SFC<SetContactAttribute> = (
       getLanguageForCode(setLanguageAction.language, (action as any).languages),
       false
     );
+  }
+
+  if (action.type === Types.set_contact_status) {
+    return renderSetText('status', (action as SetContactStatus).status, false);
   }
 
   if (action.type === Types.set_contact_name) {

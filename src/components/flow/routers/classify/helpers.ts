@@ -6,11 +6,11 @@ import {
   createRenderNode
 } from 'components/flow/routers/helpers';
 import { DEFAULT_OPERAND } from 'components/nodeeditor/constants';
-import { Types, Operators, HIDDEN } from 'config/interfaces';
+import { Types, Operators, VISIBILITY_HIDDEN } from 'config/interfaces';
 import { getType } from 'config/typeConfigs';
 import { CallClassifier, SwitchRouter, Case, Exit, Category, RouterTypes } from 'flowTypes';
-import { RenderNode, AssetType } from 'store/flowContext';
-import { NodeEditorSettings, StringEntry, AssetEntry } from 'store/nodeEditor';
+import { RenderNode } from 'store/flowContext';
+import { NodeEditorSettings, StringEntry, FormEntry } from 'store/nodeEditor';
 import { createUUID, scalarArrayEquals, snakify } from 'utils';
 import { ClassifyRouterFormState } from 'components/flow/routers/classify/ClassifyRouterForm';
 import { CaseProps } from 'components/flow/routers/caselist/CaseList';
@@ -28,11 +28,11 @@ export const getOriginalAction = (settings: NodeEditorSettings): CallClassifier 
 
 export const nodeToState = (settings: NodeEditorSettings): ClassifyRouterFormState => {
   // TODO: work out an incremental result name
-  const resultName: StringEntry = { value: 'Result' };
+  let resultName: StringEntry = { value: 'Result' };
   let initialCases: CaseProps[] = [];
 
   let operand = DEFAULT_OPERAND;
-  let classifier: AssetEntry = { value: null };
+  let classifier: FormEntry = { value: null };
 
   let hiddenCases: CaseProps[] = [];
 
@@ -43,17 +43,17 @@ export const nodeToState = (settings: NodeEditorSettings): ClassifyRouterFormSta
       initialCases = createCaseProps(router.cases, settings.originalNode);
 
       hiddenCases = initialCases.filter(
-        (kase: CaseProps) => getOperatorConfig(kase.kase.type).visibility === HIDDEN
+        (kase: CaseProps) => getOperatorConfig(kase.kase.type).visibility === VISIBILITY_HIDDEN
       );
 
       initialCases = initialCases.filter(
-        (kase: CaseProps) => getOperatorConfig(kase.kase.type).visibility !== HIDDEN
+        (kase: CaseProps) => getOperatorConfig(kase.kase.type).visibility !== VISIBILITY_HIDDEN
       );
     }
 
+    resultName = { value: router.result_name || 'Result' };
     const action = getOriginalAction(settings) as CallClassifier;
-    const { uuid: id, name } = action.classifier;
-    classifier = { value: { id, name, type: AssetType.Classifier } };
+    classifier = { value: action.classifier };
     operand = action.input;
   }
 
@@ -152,7 +152,7 @@ export const stateToNode = (
     result_name: actionResultName,
     input: state.operand.value,
     classifier: {
-      uuid: state.classifier.value.id,
+      uuid: state.classifier.value.uuid,
       name: state.classifier.value.name
     }
   };
@@ -173,19 +173,4 @@ export const stateToNode = (
     Types.split_by_intent,
     [newAction]
   );
-};
-
-export const createEmptyCase = (): CaseProps => {
-  const uuid = createUUID();
-  return {
-    uuid,
-    kase: {
-      uuid,
-      type: Operators.has_top_intent,
-      arguments: ['', ''],
-      category_uuid: null
-    },
-    categoryName: '',
-    valid: true
-  };
 };

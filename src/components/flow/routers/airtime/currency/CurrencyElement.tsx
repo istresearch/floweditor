@@ -2,14 +2,14 @@ import { react as bindCallbacks } from 'auto-bind';
 import { AirtimeTransferEntry } from 'components/flow/routers/airtime/AirtimeRouterForm';
 import AssetSelector from 'components/form/assetselector/AssetSelector';
 import FormElement from 'components/form/FormElement';
-import TextInputElement from 'components/form/textinput/TextInputElement';
+import TextInputElement, { TextInputStyle } from 'components/form/textinput/TextInputElement';
 import * as React from 'react';
 import { Asset, Assets } from 'store/flowContext';
 import { ValidationFailure } from 'store/nodeEditor';
-import { small } from 'utils/reactselect';
 
 import styles from './CurrencyElement.module.scss';
 import i18n from 'config/i18n';
+import { TembaSelectStyle } from 'temba/TembaSelect';
 
 export interface AirtimeTransfer {
   amount: string;
@@ -34,7 +34,7 @@ export default class CurrencyElement extends React.Component<CurrencyElementProp
     });
   }
 
-  private handleCurrencyChanged(selected: Asset[]): void {
+  private handleCurrencyChanged(selected: any[]): void {
     this.props.onChange(this.props.index, {
       value: { amount: this.props.transfer.value.amount, code: selected[0].id },
       validationFailures: this.props.transfer.validationFailures
@@ -78,6 +78,7 @@ export default class CurrencyElement extends React.Component<CurrencyElementProp
             name={i18n.t('forms.value', 'value')}
             onChange={this.handleAmountChanged}
             entry={{ value: amount }}
+            style={TextInputStyle.medium}
           />
         </div>
       ) : null;
@@ -111,13 +112,14 @@ export default class CurrencyElement extends React.Component<CurrencyElementProp
         <div className={styles.transfer}>
           <div className={styles.currency}>
             <AssetSelector
-              styles={small as any}
+              style={TembaSelectStyle.small}
               name={i18n.t('forms.currency', 'Currency')}
               shouldExclude={shouldExclude}
-              assets={this.props.currencies}
               entry={{ value: currency }}
-              searchable={true}
+              nameKey="id"
+              valueKey="id"
               onChange={this.handleCurrencyChanged}
+              assets={this.props.currencies}
               placeholder={i18n.t('forms.currency', 'Select a Currency')}
             />
           </div>

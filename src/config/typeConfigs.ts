@@ -29,6 +29,7 @@ import TransferAirtimeComp from 'components/flow/actions/transferairtime/Transfe
 import UpdateContactComp from 'components/flow/actions/updatecontact/UpdateContact';
 import UpdateContactForm from 'components/flow/actions/updatecontact/UpdateContactForm';
 import AirtimeRouterForm from 'components/flow/routers/airtime/AirtimeRouterForm';
+import DialRouterForm from 'components/flow/routers/dial/DialRouterForm';
 import DigitsRouterForm from 'components/flow/routers/digits/DigitsRouterForm';
 import ExpressionRouterForm from 'components/flow/routers/expression/ExpressionRouterForm';
 import FieldRouterForm from 'components/flow/routers/field/FieldRouterForm';
@@ -43,15 +44,16 @@ import SubflowRouterForm from 'components/flow/routers/subflow/SubflowRouterForm
 import WaitRouterForm from 'components/flow/routers/wait/WaitRouterForm';
 import WebhookRouterForm from 'components/flow/routers/webhook/WebhookRouterForm';
 import {
+  FeatureFilter,
   FlowTypes,
-  HIDDEN,
-  ONLINE,
-  SURVEY,
-  TEXT_TYPES,
   Type,
   Types,
-  VOICE,
-  FeatureFilter
+  VISIBILITY_HIDDEN,
+  VISIBILITY_ONLINE,
+  VISIBILITY_SURVEYOR,
+  VISIBILITY_VOICE,
+  VISIBILITY_INTERACTIVE,
+  VISIBILITY_MESSAGING_INTERACTIVE
 } from 'config/interfaces';
 import { HintTypes, RouterTypes, FlowEditorConfig, SendMsg } from 'flowTypes';
 import { RenderNode } from 'store/flowContext';
@@ -167,7 +169,7 @@ export const typeConfigList: Type[] = [
     name: 'Missing',
     description: ' ** Unsupported ** ',
     component: MissingComp,
-    visibility: HIDDEN
+    visibility: VISIBILITY_HIDDEN
   },
   {
     type: Types.say_msg,
@@ -177,7 +179,7 @@ export const typeConfigList: Type[] = [
     localization: MsgLocalizationForm,
     localizeableKeys: ['text', 'audio_url'],
     component: SayMsgComp,
-    visibility: VOICE
+    visibility: VISIBILITY_VOICE
   },
 
   {
@@ -187,7 +189,7 @@ export const typeConfigList: Type[] = [
     form: MenuRouterForm,
     localization: RouterLocalizationForm,
     localizeableKeys: ['exits'],
-    visibility: VOICE
+    visibility: VISIBILITY_VOICE
   },
   {
     type: Types.wait_for_digits,
@@ -196,7 +198,7 @@ export const typeConfigList: Type[] = [
     form: DigitsRouterForm,
     localization: RouterLocalizationForm,
     localizeableKeys: ['exits', 'cases'],
-    visibility: VOICE
+    visibility: VISIBILITY_VOICE
   },
 
   {
@@ -206,7 +208,18 @@ export const typeConfigList: Type[] = [
     form: WaitRouterForm,
     localization: RouterLocalizationForm,
     localizeableKeys: ['exits'],
-    visibility: [FlowTypes.SURVEY, FlowTypes.VOICE]
+    visibility: [FlowTypes.MESSAGING_OFFLINE, FlowTypes.VOICE]
+  },
+
+  {
+    type: Types.wait_for_dial,
+    name: i18n.t('actions.wait_for_dial.name', 'Wait for Forwarded Call'),
+    description: i18n.t(
+      'actions.wait_for_dial.description',
+      'Wait for forwarded call to someone else'
+    ),
+    form: DialRouterForm,
+    visibility: VISIBILITY_VOICE
   },
 
   {
@@ -231,7 +244,7 @@ export const typeConfigList: Type[] = [
     localization: RouterLocalizationForm,
     localizeableKeys: ['categories', 'cases'],
     aliases: [RouterTypes.switch],
-    visibility: TEXT_TYPES
+    visibility: VISIBILITY_MESSAGING_INTERACTIVE
   },
 
   {
@@ -248,7 +261,8 @@ export const typeConfigList: Type[] = [
     name: i18n.t('actions.add_input.name', 'Add Labels'),
     description: i18n.t('actions.add_input.description', 'Label the incoming message'),
     form: AddLabelsForm,
-    component: AddLabelsComp
+    component: AddLabelsComp,
+    visibility: VISIBILITY_INTERACTIVE
   },
   {
     type: Types.add_contact_urn,
@@ -276,7 +290,12 @@ export const typeConfigList: Type[] = [
   },
   {
     type: Types.set_contact_field,
-    aliases: [Types.set_contact_name, Types.set_contact_language, Types.set_contact_channel],
+    aliases: [
+      Types.set_contact_name,
+      Types.set_contact_language,
+      Types.set_contact_channel,
+      Types.set_contact_status
+    ],
     name: i18n.t('actions.set_contact_field.name', 'Update Contact'),
     description: i18n.t('actions.set_contact_field.description', 'Update the contact'),
     form: UpdateContactForm,
@@ -290,7 +309,7 @@ export const typeConfigList: Type[] = [
     localization: KeyLocalizationForm,
     localizeableKeys: ['subject', 'body'],
     component: SendEmailComp,
-    visibility: ONLINE
+    visibility: VISIBILITY_ONLINE
   },
   {
     type: Types.set_run_result,
@@ -306,7 +325,7 @@ export const typeConfigList: Type[] = [
     description: i18n.t('actions.play_audio.description', 'Play a contact recording'),
     form: PlayAudioForm,
     component: PlayAudioComp,
-    visibility: VOICE
+    visibility: VISIBILITY_VOICE
   },
 
   {
@@ -318,7 +337,7 @@ export const typeConfigList: Type[] = [
     localizeableKeys: ['exits'],
     component: CallWebhookComp,
     aliases: [Types.split_by_webhook],
-    visibility: ONLINE
+    visibility: VISIBILITY_ONLINE
   },
   {
     type: Types.call_resthook,
@@ -330,7 +349,7 @@ export const typeConfigList: Type[] = [
     component: CallResthookComp,
     aliases: [Types.split_by_resthook],
     filter: FeatureFilter.HAS_RESTHOOK,
-    visibility: ONLINE
+    visibility: VISIBILITY_ONLINE
   },
   {
     type: Types.enter_flow,
@@ -350,7 +369,7 @@ export const typeConfigList: Type[] = [
     localizeableKeys: ['exits'],
     form: StartSessionForm,
     component: StartSessionComp,
-    visibility: ONLINE
+    visibility: VISIBILITY_ONLINE
   },
   {
     type: Types.open_ticket,
@@ -361,7 +380,7 @@ export const typeConfigList: Type[] = [
     localizeableKeys: ['exits'],
     component: OpenTicketComp,
     aliases: [Types.split_by_ticket],
-    visibility: ONLINE,
+    visibility: VISIBILITY_ONLINE,
     filter: FeatureFilter.HAS_TICKETER
   },
   {
@@ -373,7 +392,7 @@ export const typeConfigList: Type[] = [
     localizeableKeys: ['exits'],
     component: TransferAirtimeComp,
     aliases: [Types.split_by_airtime],
-    visibility: ONLINE,
+    visibility: VISIBILITY_ONLINE,
     filter: FeatureFilter.HAS_AIRTIME
   },
 
@@ -386,7 +405,7 @@ export const typeConfigList: Type[] = [
     form: WaitRouterForm,
     localization: RouterLocalizationForm,
     localizeableKeys: ['exits'],
-    visibility: SURVEY
+    visibility: VISIBILITY_SURVEYOR
   },
   {
     type: Types.wait_for_video,
@@ -395,7 +414,7 @@ export const typeConfigList: Type[] = [
     form: WaitRouterForm,
     localization: RouterLocalizationForm,
     localizeableKeys: ['exits'],
-    visibility: SURVEY
+    visibility: VISIBILITY_SURVEYOR
   },
   {
     type: Types.wait_for_location,
@@ -407,7 +426,7 @@ export const typeConfigList: Type[] = [
     form: WaitRouterForm,
     localization: RouterLocalizationForm,
     localizeableKeys: ['exits'],
-    visibility: SURVEY
+    visibility: VISIBILITY_SURVEYOR
   },
   {
     type: Types.split_by_intent,
@@ -418,7 +437,7 @@ export const typeConfigList: Type[] = [
     localizeableKeys: ['exits'],
     component: CallClassifierComp,
     aliases: [Types.call_classifier],
-    visibility: ONLINE,
+    visibility: VISIBILITY_ONLINE,
     filter: FeatureFilter.HAS_CLASSIFIER
   },
   {
