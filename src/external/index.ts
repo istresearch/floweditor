@@ -4,22 +4,18 @@ import { SaveResult } from 'components/revisions/RevisionExplorer';
 import { Endpoints, Exit, FlowDefinition, SPEC_VERSION, FlowDetails } from 'flowTypes';
 import { currencies } from 'store/currencies';
 import { Activity, RecentMessage } from 'store/editor';
-import {
-  Asset,
-  AssetMap,
-  Assets,
-  AssetStore,
-  AssetType,
-  CompletionOption
-} from 'store/flowContext';
+import { Asset, AssetMap, Assets, AssetStore, AssetType } from 'store/flowContext';
 import { assetListToMap } from 'store/helpers';
-import { CompletionSchema } from 'utils/completion';
 import { FlowTypes } from 'config/interfaces';
 
 // Configure axios to always send JSON requests
 axios.defaults.headers.post['Content-Type'] = 'application/javascript';
 axios.defaults.responseType = 'json';
 axios.defaults.timeout = 30000;
+
+export const setHTTPTimeout = (millis: number) => {
+  axios.defaults.timeout = millis;
+};
 
 /**
  * Gets the path activity and the count of active particpants at each node
@@ -119,7 +115,7 @@ export const postNewAsset = (assets: Assets, payload: any): Promise<Asset> => {
     axios
       .post(assets.endpoint, payload, { headers })
       .then((response: AxiosResponse) => {
-        resolve(resultToAsset(response.data, assets.type, assets.id));
+        resolve(response.data);
       })
       .catch(error => reject(error));
   });
@@ -169,6 +165,19 @@ export const getAssets = async (url: string, type: AssetType, id: string): Promi
   return assets;
 };
 
+export const getFlowType = (flow: any) => {
+  switch (flow.type) {
+    case 'message':
+      return FlowTypes.MESSAGING;
+    case 'voice':
+      return FlowTypes.VOICE;
+    case 'background':
+      return FlowTypes.MESSAGING_BACKGROUND;
+    case 'survey':
+      return FlowTypes.MESSAGING_OFFLINE;
+  }
+};
+
 export const resultToAsset = (result: any, type: AssetType, id: string): Asset => {
   const idKey = id || 'uuid';
 
@@ -177,13 +186,16 @@ export const resultToAsset = (result: any, type: AssetType, id: string): Asset =
   if (type === AssetType.Flow && result.type) {
     switch (result.type) {
       case 'message':
-        result.type = FlowTypes.MESSAGE;
+        result.type = FlowTypes.MESSAGING;
         break;
       case 'voice':
         result.type = FlowTypes.VOICE;
         break;
+      case 'background':
+        result.type = FlowTypes.MESSAGING_BACKGROUND;
+        break;
       case 'survey':
-        result.type = FlowTypes.SURVEY;
+        result.type = FlowTypes.MESSAGING_OFFLINE;
         break;
     }
   }
@@ -335,7 +347,7 @@ export const createAssetStore = (endpoints: Endpoints): Promise<AssetStore> => {
 
     // prefetch some of our assets
     const fetches: any[] = [];
-    ['languages', 'fields', 'groups', 'labels', 'globals', 'classifiers'].forEach(
+    ['languages', 'fields', 'groups', 'labels', 'globals', 'classifiers', 'ticketers'].forEach(
       (storeId: string) => {
         const store = assetStore[storeId];
         fetches.push(
@@ -350,25 +362,6 @@ export const createAssetStore = (endpoints: Endpoints): Promise<AssetStore> => {
     // wait for our prefetches to finish
     Promise.all(fetches).then((results: any) => {
       resolve(assetStore);
-    });
-  });
-};
-
-export const getFunctions = (endpoint: string): Promise<CompletionOption[]> => {
-  return new Promise<CompletionOption[]>((resolve, reject) => {
-    axios
-      .get(endpoint)
-      .then(response => {
-        resolve(response.data);
-      })
-      .catch(error => reject(error));
-  });
-};
-
-export const getCompletionSchema = (endpoint: string): Promise<CompletionSchema> => {
-  return new Promise<CompletionSchema>((resolve, reject) => {
-    axios.get(endpoint).then(response => {
-      resolve(response.data);
     });
   });
 };

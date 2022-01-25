@@ -1,5 +1,5 @@
 import { Methods } from 'components/flow/routers/webhook/helpers';
-import { FlowTypes, Operators, Types } from 'config/interfaces';
+import { FlowTypes, Operators, Types, ContactStatus } from 'config/interfaces';
 
 // we don't concern ourselves with patch versions
 export const SPEC_VERSION = '13.1';
@@ -38,8 +38,6 @@ export interface Endpoints {
   environment: string;
   languages: string;
   templates: string;
-  completion: string;
-  functions: string;
   simulateStart: string;
   simulateResume: string;
   editor: string;
@@ -56,6 +54,7 @@ export interface FlowEditorConfig {
   debug?: boolean;
   path?: string;
   headers?: any;
+  brand: string;
   onLoad?: () => void;
   onActivityClicked?: (uuid: string) => void;
   onChangeLanguage?: (code: string, name: string) => void;
@@ -107,7 +106,6 @@ export interface FlowMetadata {
   waiting_exit_uuids: string[];
   results: Result[];
   parent_refs: string[];
-  issues: FlowIssue[];
 }
 
 export enum FlowIssueType {
@@ -128,6 +126,7 @@ export interface FlowIssue {
 
 export interface FlowDetails {
   definition: FlowDefinition;
+  issues: FlowIssue[];
   metadata: FlowMetadata;
 }
 
@@ -204,7 +203,8 @@ export interface SwitchRouter extends Router {
 }
 
 export enum WaitTypes {
-  msg = 'msg'
+  msg = 'msg',
+  dial = 'dial'
 }
 
 export enum HintTypes {
@@ -229,11 +229,13 @@ export interface Wait {
   type: WaitTypes;
   timeout?: Timeout;
   hint?: Hint;
+  phone?: string;
 }
 
 export interface Group {
-  uuid: string;
-  name: string;
+  uuid?: string;
+  name?: string;
+  name_match?: string;
 }
 
 export interface Contact {
@@ -257,6 +259,7 @@ export interface Field {
 export interface Label {
   uuid: string;
   name: string;
+  name_match?: string;
 }
 
 export interface Flow {
@@ -289,11 +292,20 @@ export interface SetContactChannel extends Action {
   channel: Channel;
 }
 
-export type SetContactProperty = SetContactName | SetContactLanguage | SetContactChannel;
+export interface SetContactStatus extends Action {
+  type: Types.set_contact_status;
+  status: ContactStatus;
+}
+
+export type SetContactProperty =
+  | SetContactName
+  | SetContactLanguage
+  | SetContactChannel
+  | SetContactStatus;
 
 export type SetContactAttribute = SetContactField | SetContactProperty;
 
-// tslint:disable-next-line:no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Missing extends Action {}
 
 export interface RecipientsAction extends Action {
@@ -490,6 +502,7 @@ export enum ContactProperties {
   Org = 'org',
   Name = 'name',
   Language = 'language',
+  Status = 'status',
   Timezone = 'timezone',
   Channel = 'channel',
   Email = 'email',
@@ -534,4 +547,18 @@ export enum WebhookExitNames {
 export enum TransferAirtimeExitNames {
   Success = 'Success',
   Failure = 'Failed'
+}
+
+export enum DialCategoryNames {
+  Answered = 'Answered',
+  NoAnswer = 'No Answer',
+  Busy = 'Busy',
+  Failure = 'Failed'
+}
+
+export enum DialStatus {
+  answered = 'answered',
+  noAnswer = 'no_answer',
+  busy = 'busy',
+  failure = 'failed'
 }

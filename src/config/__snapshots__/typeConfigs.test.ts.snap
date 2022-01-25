@@ -63,7 +63,16 @@ Array [
     "name": "Wait for Audio",
     "type": "wait_for_audio",
     "visibility": Array [
-      "message_offline",
+      "messaging_offline",
+      "voice",
+    ],
+  },
+  Object {
+    "description": "Wait for forwarded call to someone else",
+    "form": [Function],
+    "name": "Wait for Forwarded Call",
+    "type": "wait_for_dial",
+    "visibility": Array [
       "voice",
     ],
   },
@@ -95,8 +104,8 @@ Array [
     "name": "Wait for Response",
     "type": "wait_for_response",
     "visibility": Array [
-      "message",
-      "message_offline",
+      "messaging",
+      "messaging_offline",
     ],
   },
   Object {
@@ -116,6 +125,11 @@ Array [
     "form": [Function],
     "name": "Add Labels",
     "type": "add_input_labels",
+    "visibility": Array [
+      "messaging",
+      "messaging_offline",
+      "voice",
+    ],
   },
   Object {
     "component": [Function],
@@ -143,6 +157,7 @@ Array [
       "set_contact_name",
       "set_contact_language",
       "set_contact_channel",
+      "set_contact_status",
     ],
     "component": [Function],
     "description": "Update the contact",
@@ -162,7 +177,8 @@ Array [
     "name": "Send Email",
     "type": "send_email",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -197,7 +213,8 @@ Array [
     "name": "Call Webhook",
     "type": "call_webhook",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -216,7 +233,8 @@ Array [
     "name": "Call Zapier",
     "type": "call_resthook",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -245,7 +263,8 @@ Array [
     "name": "Start Somebody Else",
     "type": "start_session",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -264,7 +283,8 @@ Array [
     "name": "Open Ticket",
     "type": "open_ticket",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -283,7 +303,8 @@ Array [
     "name": "Send Airtime",
     "type": "transfer_airtime",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -297,7 +318,7 @@ Array [
     "name": "Wait for Image",
     "type": "wait_for_image",
     "visibility": Array [
-      "message_offline",
+      "messaging_offline",
     ],
   },
   Object {
@@ -310,7 +331,7 @@ Array [
     "name": "Wait for Video",
     "type": "wait_for_video",
     "visibility": Array [
-      "message_offline",
+      "messaging_offline",
     ],
   },
   Object {
@@ -323,7 +344,7 @@ Array [
     "name": "Wait for Location",
     "type": "wait_for_location",
     "visibility": Array [
-      "message_offline",
+      "messaging_offline",
     ],
   },
   Object {
@@ -341,7 +362,8 @@ Array [
     "name": "Split by Intent",
     "type": "split_by_intent",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -436,6 +458,11 @@ Object {
     "form": [Function],
     "name": "Add Labels",
     "type": "add_input_labels",
+    "visibility": Array [
+      "messaging",
+      "messaging_offline",
+      "voice",
+    ],
   },
   "call_classifier": Object {
     "aliases": Array [
@@ -452,7 +479,8 @@ Object {
     "name": "Split by Intent",
     "type": "split_by_intent",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -471,7 +499,8 @@ Object {
     "name": "Call Zapier",
     "type": "call_resthook",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -489,7 +518,8 @@ Object {
     "name": "Call Webhook",
     "type": "call_webhook",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -531,7 +561,8 @@ Object {
     "name": "Open Ticket",
     "type": "open_ticket",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -590,7 +621,8 @@ Object {
     "name": "Send Email",
     "type": "send_email",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -613,6 +645,7 @@ Object {
       "set_contact_name",
       "set_contact_language",
       "set_contact_channel",
+      "set_contact_status",
     ],
     "component": [Function],
     "description": "Update the contact",
@@ -625,6 +658,7 @@ Object {
       "set_contact_name",
       "set_contact_language",
       "set_contact_channel",
+      "set_contact_status",
     ],
     "component": [Function],
     "description": "Update the contact",
@@ -637,6 +671,7 @@ Object {
       "set_contact_name",
       "set_contact_language",
       "set_contact_channel",
+      "set_contact_status",
     ],
     "component": [Function],
     "description": "Update the contact",
@@ -649,6 +684,20 @@ Object {
       "set_contact_name",
       "set_contact_language",
       "set_contact_channel",
+      "set_contact_status",
+    ],
+    "component": [Function],
+    "description": "Update the contact",
+    "form": [Function],
+    "name": "Update Contact",
+    "type": "set_contact_field",
+  },
+  "set_contact_status": Object {
+    "aliases": Array [
+      "set_contact_name",
+      "set_contact_language",
+      "set_contact_channel",
+      "set_contact_status",
     ],
     "component": [Function],
     "description": "Update the contact",
@@ -678,7 +727,8 @@ Object {
     "name": "Send Airtime",
     "type": "transfer_airtime",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -729,7 +779,8 @@ Object {
     "name": "Split by Intent",
     "type": "split_by_intent",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -758,7 +809,8 @@ Object {
     "name": "Call Zapier",
     "type": "call_resthook",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -829,7 +881,8 @@ Object {
     "name": "Open Ticket",
     "type": "open_ticket",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -847,7 +900,8 @@ Object {
     "name": "Call Webhook",
     "type": "call_webhook",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -862,7 +916,8 @@ Object {
     "name": "Start Somebody Else",
     "type": "start_session",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -880,8 +935,8 @@ Object {
     "name": "Wait for Response",
     "type": "wait_for_response",
     "visibility": Array [
-      "message",
-      "message_offline",
+      "messaging",
+      "messaging_offline",
     ],
   },
   "transfer_airtime": Object {
@@ -899,7 +954,8 @@ Object {
     "name": "Send Airtime",
     "type": "transfer_airtime",
     "visibility": Array [
-      "message",
+      "messaging",
+      "messaging_background",
       "voice",
     ],
   },
@@ -913,7 +969,16 @@ Object {
     "name": "Wait for Audio",
     "type": "wait_for_audio",
     "visibility": Array [
-      "message_offline",
+      "messaging_offline",
+      "voice",
+    ],
+  },
+  "wait_for_dial": Object {
+    "description": "Wait for forwarded call to someone else",
+    "form": [Function],
+    "name": "Wait for Forwarded Call",
+    "type": "wait_for_dial",
+    "visibility": Array [
       "voice",
     ],
   },
@@ -941,7 +1006,7 @@ Object {
     "name": "Wait for Image",
     "type": "wait_for_image",
     "visibility": Array [
-      "message_offline",
+      "messaging_offline",
     ],
   },
   "wait_for_location": Object {
@@ -954,7 +1019,7 @@ Object {
     "name": "Wait for Location",
     "type": "wait_for_location",
     "visibility": Array [
-      "message_offline",
+      "messaging_offline",
     ],
   },
   "wait_for_menu": Object {
@@ -984,8 +1049,8 @@ Object {
     "name": "Wait for Response",
     "type": "wait_for_response",
     "visibility": Array [
-      "message",
-      "message_offline",
+      "messaging",
+      "messaging_offline",
     ],
   },
   "wait_for_video": Object {
@@ -998,7 +1063,7 @@ Object {
     "name": "Wait for Video",
     "type": "wait_for_video",
     "visibility": Array [
-      "message_offline",
+      "messaging_offline",
     ],
   },
 }

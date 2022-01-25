@@ -78,6 +78,13 @@ describe(LogEvent.name, () => {
       ...commonEventProps
     });
   });
+  it('should render contact_status_changed event', () => {
+    testEventRender({
+      type: 'contact_status_changed',
+      status: 'blocked',
+      ...commonEventProps
+    });
+  });
   it('should render contact_urns_changed event', () => {
     testEventRender({
       type: 'contact_urns_changed',
@@ -196,8 +203,7 @@ describe(LogEvent.name, () => {
     testEventRender({
       type: 'ticket_opened',
       ticketer: { uuid: '15892014-144c-4721-a611-c80b38481055', name: 'Email Support' },
-      subject: 'Need help',
-      body: 'Where are my cookies?',
+      ticket: { subject: 'Need help', body: 'Where are my cookies?' },
       result_name: 'Ticket',
       ...commonEventProps
     });

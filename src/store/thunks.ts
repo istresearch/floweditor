@@ -4,13 +4,7 @@ import { getSwitchRouter } from 'components/flow/routers/helpers';
 import { SaveResult } from 'components/revisions/RevisionExplorer';
 import { FlowTypes, Type, Types } from 'config/interfaces';
 import { getTypeConfig } from 'config/typeConfigs';
-import {
-  createAssetStore,
-  getCompletionSchema,
-  getFlowDetails,
-  saveRevision,
-  getFunctions
-} from 'external';
+import { createAssetStore, getFlowDetails, saveRevision } from 'external';
 import isEqual from 'fast-deep-equal';
 import {
   Action,
@@ -67,6 +61,7 @@ import AppState from 'store/state';
 import { createUUID, hasString, NODE_SPACING, timeEnd, timeStart, ACTIVITY_INTERVAL } from 'utils';
 import { AxiosError } from 'axios';
 import i18n from 'config/i18n';
+import { TembaStore } from 'temba-components';
 
 // TODO: Remove use of Function
 // tslint:disable:ban-types
@@ -177,6 +172,11 @@ const NETWORK_ERROR = i18n.t(
   'Hmm, we ran into a problem trying to save your changes. It could just be that your internet connection is not working well at the moment. Please wait a minute or so and try again.'
 );
 
+const SERVER_ERROR = i18n.t(
+  'errors.server',
+  'Hmm, we ran into a problem trying to save your changes. If this problem persists, take note of the change you are trying to make and contact support.'
+);
+
 export const createSaveMonitor = (dispatch: DispatchWithState) => {
   window.setInterval(() => {
     if (
@@ -232,10 +232,10 @@ export const createDirty = (
         const revision = result.revision;
         definition.revision = revision.revision;
         dispatch(updateDefinition(definition));
+        dispatch(updateIssues(createFlowIssueMap(issues, result.issues)));
 
         if (result.metadata) {
           dispatch(updateMetadata(result.metadata));
-          dispatch(updateIssues(createFlowIssueMap(issues, result.metadata.issues)));
         }
 
         const updatedAssets = mutators.addRevision(assetStore, revision);
@@ -252,11 +252,16 @@ export const createDirty = (
         postingRevision = false;
       },
       (error: AxiosError) => {
-        const errorMessage = error.response
-          ? (error.response.data as ErrorMessage).description
-          : NETWORK_ERROR;
+        let body = NETWORK_ERROR;
 
-        const body = errorMessage;
+        if (error.response && error.response.status === 500) {
+          body = SERVER_ERROR;
+        }
+
+        if (error.response && error.response.data && error.response.data.description) {
+          body = error.response.data.description;
+        }
+
         dispatch(
           mergeEditorState({
             modalMessage: {
@@ -341,8 +346,8 @@ export const loadFlowDefinition = (details: FlowDetails, assetStore: AssetStore)
     mergeAssetMaps(assetStore.languages.items, { base: DEFAULT_LANGUAGE });
   }
 
-  if (details.metadata && details.metadata.issues) {
-    dispatch(updateIssues(createFlowIssueMap(issues, details.metadata.issues)));
+  if (details.issues) {
+    dispatch(updateIssues(createFlowIssueMap(issues, details.issues)));
   } else {
     dispatch(updateIssues({}));
   }
@@ -357,6 +362,11 @@ export const loadFlowDefinition = (details: FlowDetails, assetStore: AssetStore)
   // finally update our assets, and mark us as fetched
   dispatch(updateAssets(assetStore));
   dispatch(mergeEditorState({ language, fetchingFlow: false }));
+
+  const store: TembaStore = document.querySelector('temba-store');
+  if (store) {
+    store.setKeyedAssets('results', Object.keys(assetStore.results.items));
+  }
 };
 
 /**
@@ -385,9 +395,6 @@ export const fetchFlow = (endpoints: Endpoints, uuid: string, forceSave = false)
     fetchFlowActivity(endpoints.activity, dispatch, getState, uuid);
   };
 
-  const completionSchema = await getCompletionSchema(endpoints.completion);
-  const functions = await getFunctions(endpoints.functions);
-
   getFlowDetails(assetStore.revisions)
     .then((response: any) => {
       // backwards compatibitly for during deployment
@@ -398,9 +405,7 @@ export const fetchFlow = (endpoints: Endpoints, uuid: string, forceSave = false)
       dispatch(loadFlowDefinition(details, assetStore));
       dispatch(
         mergeEditorState({
-          currentRevision: details.definition.revision,
-          completionSchema,
-          functions
+          currentRevision: details.definition.revision
         })
       );
 
@@ -430,6 +435,12 @@ export const addAsset: AddAsset = (assetType: string, asset: Asset) => (
   const updated = mutate(assetStore, {
     [assetType]: { items: { $merge: { [asset.id]: asset } } }
   });
+
+  // update our temba store if we have one
+  const store: TembaStore = document.querySelector('temba-store');
+  if (store) {
+    store.setKeyedAssets(assetType, Object.keys(updated[assetType]));
+  }
 
   dispatch(updateAssets(updated));
 };

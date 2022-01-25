@@ -7,11 +7,11 @@ import * as React from 'react';
 import { Asset } from 'store/flowContext';
 import {
   AssetArrayEntry,
-  AssetEntry,
   FormState,
   mergeForm,
   StringEntry,
-  SelectOptionEntry
+  SelectOptionEntry,
+  FormEntry
 } from 'store/nodeEditor';
 import { shouldRequireIf, validate } from 'store/validators';
 import { renderIf } from 'utils';
@@ -21,15 +21,24 @@ import TextInputElement from 'components/form/textinput/TextInputElement';
 import i18n from 'config/i18n';
 import { renderIssues } from '../helpers';
 
-export const START_TYPE_ASSETS = { label: 'Select recipients manually', value: 'assets' };
-export const START_TYPE_CREATE = { label: 'Create a new contact', value: 'create_contact' };
-export const START_TYPE_QUERY = { label: 'Select recipients from a query', value: 'contact_query' };
+export const START_TYPE_ASSETS: SelectOption = {
+  name: i18n.t('forms.start_type_manual', 'Select recipients manually'),
+  value: 'assets'
+};
+export const START_TYPE_CREATE: SelectOption = {
+  name: i18n.t('forms.start_type_create', 'Create a new contact'),
+  value: 'create_contact'
+};
+export const START_TYPE_QUERY: SelectOption = {
+  name: i18n.t('forms.start_type_query', 'Select recipients from a query'),
+  value: 'contact_query'
+};
 
 const START_TYPE_OPTIONS = [START_TYPE_ASSETS, START_TYPE_QUERY, START_TYPE_CREATE];
 
 export interface StartSessionFormState extends FormState {
   recipients: AssetArrayEntry;
-  flow: AssetEntry;
+  flow: FormEntry;
   startType: SelectOptionEntry;
   contactQuery: StringEntry;
 }
@@ -157,15 +166,15 @@ export class StartSessionForm extends React.Component<ActionFormProps, StartSess
             <div data-testid="recipients">
               <AssetSelector
                 name={i18n.t('forms.recipients', 'Recipients')}
-                placeholder="Choose who should be started in the flow"
+                placeholder={i18n.t(
+                  'forms.select_who_to_start',
+                  'Select who should be started in the flow'
+                )}
                 assets={this.props.assetStore.recipients}
-                completion={{
-                  assetStore: this.props.assetStore,
-                  schema: this.props.completionSchema
-                }}
                 entry={this.state.recipients}
                 searchable={true}
                 multi={true}
+                expressions={true}
                 onChange={this.handleRecipientsChanged}
               />
               <p />
@@ -188,7 +197,7 @@ export class StartSessionForm extends React.Component<ActionFormProps, StartSess
 
           <AssetSelector
             name={i18n.t('forms.flow', 'Flow')}
-            placeholder="Choose which flow to start"
+            placeholder={i18n.t('forms.select_flow', 'Select the flow to start')}
             assets={this.props.assetStore.flows}
             entry={this.state.flow}
             searchable={true}

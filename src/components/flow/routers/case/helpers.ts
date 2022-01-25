@@ -31,7 +31,7 @@ export const initializeForm = (props: CaseElementProps): CaseElementState => {
     max: { value: arg2 },
     state: { value: arg1 },
     district: { value: arg2 },
-    intent: { value: arg1 ? { label: arg1, value: arg1 } : null },
+    intent: { value: arg1 ? { name: arg1, value: arg1 } : null },
     confidence: { value: arg2 },
     categoryName: { value: props.categoryName || '' },
     categoryNameEdited: !!props.categoryName,
@@ -160,22 +160,37 @@ export const validateCase = (keys: {
     }
 
     if (keys.operatorConfig.type === Operators.has_number_between) {
+      const max = keys.max || '';
+      const min = keys.min || '';
+
+      const maxExpression = max.indexOf('@') > -1;
+      const minExpression = min.indexOf('@') > -1;
+      const hasExpression = maxExpression || minExpression;
+
+      const numeric = [Numeric];
+
       updates.min = validate(
         i18n.t('forms.minimum_value', 'Minimum value'),
-        keys.min || '',
-        validators.concat([
-          Numeric,
-          LessThan(parseFloat(keys.max), i18n.t('forms.the_maximum', 'the maximum'))
-        ])
+        min,
+        validators
+          .concat(!minExpression ? numeric : [])
+          .concat(
+            !hasExpression
+              ? [LessThan(parseFloat(keys.max), i18n.t('forms.the_maximum', 'the maximum'))]
+              : []
+          )
       );
 
       updates.max = validate(
         i18n.t('forms.maximum_value', 'Maximum value'),
-        keys.max || '',
-        validators.concat([
-          Numeric,
-          MoreThan(parseFloat(keys.min), i18n.t('forms.the_minimum', 'the minimum'))
-        ])
+        max,
+        validators
+          .concat(!maxExpression ? numeric : [])
+          .concat(
+            !hasExpression
+              ? [MoreThan(parseFloat(keys.min), i18n.t('forms.the_minimum', 'the minimum'))]
+              : []
+          )
       );
     } else if (keys.operatorConfig.type === Operators.has_district) {
       updates.argument = validate(
@@ -251,7 +266,7 @@ export const getCategoryName = (state: Partial<CaseElementState>): string => {
     state.operatorConfig.type === Operators.has_top_intent
   ) {
     if (state.intent.value) {
-      return titleCase(state.intent.value.label.replace('_', ' '));
+      return titleCase(state.intent.value.name.replace('_', ' '));
     }
   }
 

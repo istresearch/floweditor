@@ -2,7 +2,7 @@ import { react as bindCallbacks } from 'auto-bind';
 import { CaseProps } from 'components/flow/routers/caselist/CaseList';
 import { isRelativeDate } from 'components/flow/routers/helpers';
 import FormElement from 'components/form/FormElement';
-import TextInputElement from 'components/form/textinput/TextInputElement';
+import TextInputElement, { TextInputStyle } from 'components/form/textinput/TextInputElement';
 import { fakePropType } from 'config/ConfigProvider';
 import { filterOperators } from 'config/helpers';
 import { Operator, Operators } from 'config/interfaces';
@@ -14,7 +14,6 @@ import { hasErrorType } from 'utils';
 
 import styles from './CaseElement.module.scss';
 import { initializeForm, validateCase } from './helpers';
-import { Asset } from 'store/flowContext';
 import SelectElement, { SelectOption } from 'components/form/select/SelectElement';
 import i18n from 'config/i18n';
 import TembaSelect, { TembaSelectStyle } from 'temba/TembaSelect';
@@ -26,7 +25,7 @@ export interface CaseElementProps {
   onRemove?(uuid: string): void;
   onChange?(c: CaseProps): void;
   operators?: Operator[];
-  classifier?: Asset;
+  classifier?: any;
 }
 
 export interface CaseElementState extends FormState {
@@ -329,16 +328,20 @@ export default class CaseElement extends React.Component<CaseElementProps, CaseE
             <>
               <TextInputElement
                 name={i18n.t('forms.arguments', 'arguments')}
+                style={TextInputStyle.small}
                 onChange={this.handleMinChanged}
                 entry={this.state.min}
+                autocomplete={true}
               />
               <span className={styles.divider} data-draggable={true}>
-                and
+                {i18n.t('forms.and', 'and')}
               </span>
               <TextInputElement
                 name={i18n.t('forms.arguments', 'arguments')}
+                style={TextInputStyle.small}
                 onChange={this.handleMaxChanged}
                 entry={this.state.max}
+                autocomplete={true}
               />
             </>
           );
@@ -348,10 +351,10 @@ export default class CaseElement extends React.Component<CaseElementProps, CaseE
         ) {
           let intents: SelectOption[] = [];
 
-          if (this.props.classifier && this.props.classifier.content) {
-            intents = this.props.classifier.content.intents.map((intent: string) => {
-              const option = {
-                label: intent,
+          if (this.props.classifier && this.props.classifier.intents) {
+            intents = this.props.classifier.intents.map((intent: string) => {
+              const option: SelectOption = {
+                name: intent,
                 value: intent
               };
               return option;
@@ -365,22 +368,24 @@ export default class CaseElement extends React.Component<CaseElementProps, CaseE
                   key="intent_select"
                   style={TembaSelectStyle.small}
                   name={i18n.t('forms.intent', 'Intent')}
+                  placeholder={i18n.t('forms.select_intent', 'Select intent')}
                   entry={this.state.intent}
                   onChange={this.handleIntentChanged}
                   options={intents}
                   onMenuOpen={this.handleIntentMenuOpened}
                   onMenuClose={this.handleIntentMenuClosed}
-                  placeholder=""
+                  hideError={true}
                 ></SelectElement>
               </div>
-              <span className={styles.divider} data-draggable={true}>
+              <div className={styles.divider} data-draggable={true}>
                 above
-              </span>
+              </div>
               <div style={{ width: '34px' }}>
                 <TextInputElement
                   name={i18n.t('forms.confidence', 'confidence')}
                   onChange={this.handleConfidenceChanged}
                   entry={this.state.confidence}
+                  style={TextInputStyle.small}
                   placeholder=".9"
                 />
               </div>
@@ -393,6 +398,7 @@ export default class CaseElement extends React.Component<CaseElementProps, CaseE
                 name={i18n.t('forms.state', 'State')}
                 placeholder="State"
                 onChange={this.handleStateChanged}
+                style={TextInputStyle.small}
                 entry={this.state.state}
               />
               <span className={styles.divider} data-draggable={true}>
@@ -402,6 +408,7 @@ export default class CaseElement extends React.Component<CaseElementProps, CaseE
                 name={i18n.t('forms.district', 'District')}
                 placeholder={i18n.t('forms.district', 'District')}
                 onChange={this.handleDistrictChanged}
+                style={TextInputStyle.small}
                 entry={this.state.district}
               />
             </>
@@ -418,6 +425,7 @@ export default class CaseElement extends React.Component<CaseElementProps, CaseE
               name={i18n.t('forms.arguments', 'arguments')}
               onChange={this.handleArgumentChanged}
               entry={this.state.argument}
+              style={TextInputStyle.small}
               autocomplete={false}
             />
             <span className={styles.divider}>days</span>
@@ -426,9 +434,11 @@ export default class CaseElement extends React.Component<CaseElementProps, CaseE
       } else {
         return (
           <TextInputElement
+            data-test-id="case-arguments"
             name={i18n.t('forms.arguments', 'arguments')}
             onChange={this.handleArgumentChanged}
             entry={this.state.argument}
+            style={TextInputStyle.small}
             placeholder={this.state.operatorConfig.type === Operators.has_district ? 'State' : ''}
             autocomplete={true}
           />
@@ -471,11 +481,12 @@ export default class CaseElement extends React.Component<CaseElementProps, CaseE
             {this.renderArguments()}
           </div>
           <div className={styles.categorize_as} data-draggable={true}>
-            categorize as
+            {i18n.t('forms.categorize_as', 'categorize as')}
           </div>
           <div className={styles.category}>
             <TextInputElement
               name={i18n.t('forms.exit_name', 'Exit Name')}
+              style={TextInputStyle.small}
               onChange={this.handleExitChanged}
               entry={this.state.categoryName}
               maxLength={36}

@@ -15,6 +15,7 @@ import { initializeForm, stateToAction } from './helpers';
 import styles from './SetRunResultForm.module.scss';
 import i18n from 'config/i18n';
 import { Trans } from 'react-i18next';
+import { SelectOption } from 'components/form/select/SelectElement';
 
 export interface SetRunResultFormState extends FormState {
   name: AssetEntry;
@@ -26,6 +27,8 @@ export default class SetRunResultForm extends React.PureComponent<
   ActionFormProps,
   SetRunResultFormState
 > {
+  options: SelectOption[] = [];
+
   constructor(props: ActionFormProps) {
     super(props);
 
@@ -33,6 +36,13 @@ export default class SetRunResultForm extends React.PureComponent<
 
     bindCallbacks(this, {
       include: [/^handle/, /^on/]
+    });
+  }
+
+  public componentDidMount(): void {
+    const items = this.props.assetStore.results.items;
+    this.options = Object.keys(items).map((key: string) => {
+      return { name: items[key].name, value: key };
     });
   }
 
@@ -130,6 +140,9 @@ export default class SetRunResultForm extends React.PureComponent<
             createAssetFromInput={this.handleCreateAssetFromInput}
             formClearable={true}
             showLabel={true}
+            valueKey="value"
+            nameKey="name"
+            additionalOptions={this.options}
             helpText={
               <Trans
                 i18nKey="forms.result_name_help"
@@ -147,7 +160,10 @@ export default class SetRunResultForm extends React.PureComponent<
             onChange={this.handleValueUpdate}
             entry={this.state.value}
             autocomplete={true}
-            helpText="The value to save for this result or empty to clears it. You can use expressions, for example: @(title(input))"
+            helpText={i18n.t(
+              'forms.result_value_help',
+              'The value to save for this result or empty to clears it. You can use expressions, for example: @(title(input))'
+            )}
           />
           <TextInputElement
             __className={styles.category}
@@ -157,7 +173,10 @@ export default class SetRunResultForm extends React.PureComponent<
             onChange={this.handleCategoryUpdate}
             entry={this.state.category}
             autocomplete={false}
-            helpText="An optional category for your result. For age, the value might be 17, but the category might be 'Young Adult'"
+            helpText={i18n.t(
+              'forms.result_category_help',
+              "An optional category for your result. For age, the value might be 17, but the category might be 'Young Adult'"
+            )}
           />
         </div>
         {renderIssues(this.props)}
