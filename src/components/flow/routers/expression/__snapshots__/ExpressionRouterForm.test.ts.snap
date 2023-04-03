@@ -90,6 +90,7 @@ Object {
         ],
         "type": "has_any_word",
       },
+      "valid": true,
     },
     Object {
       "categoryName": "Red",
@@ -99,6 +100,7 @@ Object {
         ],
         "type": "has_any_word",
       },
+      "valid": true,
     },
     Object {
       "categoryName": "Green",
@@ -108,6 +110,7 @@ Object {
         ],
         "type": "has_any_word",
       },
+      "valid": true,
     },
   ],
   "operand": Object {

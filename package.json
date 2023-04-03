@@ -2,12 +2,15 @@
   "name": "@nyaruka/flow-editor",
   "license": "AGPL-3.0",
   "repository": "git://github.com/nyaruka/floweditor.git",
-  "version": "1.14.0",
+  "version": "1.17.1",
   "description": "'Standalone flow editing tool designed for use within the RapidPro suite of messaging tools but can be adopted for use outside of that ecosystem.'",
   "browser": "umd/flow-editor.min.js",
   "unpkg": "umd/flow-editor.min.js",
   "author": "Nyaruka <code@nyaruka.com>",
   "homepage": "./",
+  "files": [
+    "build"
+  ],
   "private": false,
   "dependencies": {
     "react": "^16.8.6",
@@ -29,8 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom-fourteen",
     "tester": "react-scripts test --env=jest-environment-happy-dom",
-    "eject": "react-scripts eject",
-    "prepare":  "npm run build"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "production": [
@@ -65,12 +67,10 @@
     ]
   },
   "devDependencies": {
-    "babel-loader": "8.1.0",
-    "webpack": "4.42.0",
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "7.0.0",
-    "@nyaruka/temba-components": "0.11.13",
+    "@nyaruka/temba-components": "0.18.1",
     "@testing-library/jest-dom": "4.0.0",
     "@testing-library/react": "8.0.1",
     "@types/common-tags": "^1.8.0",
@@ -92,11 +92,11 @@
     "@types/webpack-env": "^1.13.6",
     "@typescript-eslint/eslint-plugin": "1.12.0",
     "@typescript-eslint/parser": "1.12.0",
-    "ajv": "6.5.2",
+    "ajv": "6.12.3",
     "array-move": "2.1.0",
     "auto-bind": "2.1.0",
     "auto-changelog": "1.13.0",
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "camelcase": "^5.3.1",
     "classnames": "2.2.6",
     "common-tags": "1.8.0",
@@ -156,7 +156,7 @@
     "tslint": "5.17.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-plugin-prettier": "2.0.1",
-    "typescript": "3.7.4",
+    "typescript": "3.4.5",
     "uniqid": "5.0.3",
     "uuid": "3.3.2"
   }

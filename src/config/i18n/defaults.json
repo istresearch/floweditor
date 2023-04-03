@@ -393,9 +393,9 @@
     "has_ward": "has ward",
     "has_ward_category": "Has Ward"
   },
-  "recent_messages": {
-    "header": "Recent Messages",
-    "header_empty": "No Recent Messages"
+  "recent_contacts": {
+    "header": "Recent Contacts",
+    "header_empty": "No Recent Contacts"
   },
   "removal_confirmation": "Remove?",
   "revisions": {
@@ -491,7 +491,7 @@
       "title": "Email Details"
     },
     "session_triggered": "Started somebody else in \"[[flow]]\"",
-    "ticket_opened": "Ticket opened with subject \"[[subject]]\""
+    "ticket_opened": "Ticket opened with topic \"[[topic]]\""
   },
   "sticky": {
     "body": "...",
