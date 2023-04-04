@@ -32,7 +32,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom-fourteen",
     "tester": "react-scripts test --env=jest-environment-happy-dom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare": "npm run build --scripts-prepend-node-path"
   },
   "browserslist": {
     "production": [
@@ -70,15 +71,18 @@
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/preset-react": "7.0.0",
+    "@babel/traverse": "7.0.0",
     "@nyaruka/temba-components": "0.18.1",
     "@testing-library/jest-dom": "4.0.0",
     "@testing-library/react": "8.0.1",
+    "@types/babel__core": "7.1.7",
     "@types/common-tags": "^1.8.0",
     "@types/core-js": "2.5.0",
     "@types/dateformat": "3.0.0",
     "@types/enzyme": "^3.9.3",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/jest": "24.0.13",
+    "@types/node": "^13",
     "@types/react": "16.8.23",
     "@types/react-addons-shallow-compare": "0.14.22",
     "@types/react-dom": "16.8.4",
@@ -87,8 +91,8 @@
     "@types/react-select": "3.0.8",
     "@types/redux-mock-store": "^1.0.0",
     "@types/textarea-caret": "3.0.0",
-    "@types/uniqid": "^4.1.2",
-    "@types/uuid": "^3.4.3",
+    "@types/uniqid": "^5.3",
+    "@types/uuid": "^9.0",
     "@types/webpack-env": "^1.13.6",
     "@typescript-eslint/eslint-plugin": "1.12.0",
     "@typescript-eslint/parser": "1.12.0",
@@ -123,7 +127,7 @@
     "lint-staged": "8.1.7",
     "local-storage": "1.4.2",
     "lodash.clonedeep": "4.5.0",
-    "moment": "2.24.0",
+    "moment": "^2.29",
     "netlify-lambda": "^1.4.9",
     "prettier": "1.18.2",
     "pretty-quick": "^1.11.0",
@@ -157,7 +161,10 @@
     "tslint-config-prettier": "1.18.0",
     "tslint-plugin-prettier": "2.0.1",
     "typescript": "3.4.5",
-    "uniqid": "5.0.3",
-    "uuid": "3.3.2"
+    "uniqid": "^5.4",
+    "uuid": "^9.0"
+  },
+  "resolutions": {
+    "@types/babel__traverse": "7.0.6"
   }
 }
