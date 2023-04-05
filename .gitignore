@@ -1,3 +1,4 @@
+.*
 !.storybook/
 node_modules/
 umd/
@@ -12,4 +13,7 @@ report.html
 lambda-build
 lib
 build
-.idea
+deploy
+fabric
+fabfile.py
+_*

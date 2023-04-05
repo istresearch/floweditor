@@ -93,20 +93,17 @@ export const createPlayAudioAction = ({
 export const createSendMsgAction = ({
   uuid = utils.createUUID(),
   text = 'Hey!',
-  all_urns = false,
-  labels = []
+  all_urns = false
 }: {
   uuid?: string;
   text?: string;
   // tslint:disable-next-line:variable-name
   all_urns?: boolean;
-  labels?: Label[];
 } = {}): SendMsg => ({
   type: Types.send_msg,
   uuid,
   text,
-  all_urns,
-  labels
+  all_urns
 });
 
 export const createSendEmailAction = ({

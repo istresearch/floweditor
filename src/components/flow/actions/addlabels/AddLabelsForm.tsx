@@ -80,7 +80,6 @@ export default class AddLabelsForm extends React.PureComponent<
 
   public render(): JSX.Element {
     const typeConfig = this.props.typeConfig;
-
     return (
       <Dialog title={typeConfig.name} headerClass={typeConfig.type} buttons={this.getButtons()}>
         <TypeList __className="" initialType={typeConfig} onChange={this.props.onTypeChange} />
