@@ -33,7 +33,7 @@
     "test": "react-scripts test --env=jsdom-fourteen",
     "tester": "react-scripts test --env=jest-environment-happy-dom",
     "eject": "react-scripts eject",
-    "prepare": "npm run build --scripts-prepend-node-path"
+    "prepare": "npm run build --scripts-prepend-node-path --omit=dev"
   },
   "browserslist": {
     "production": [
@@ -97,8 +97,8 @@
     "@types/uniqid": "^5.3",
     "@types/uuid": "^9.0",
     "@types/webpack-env": "^1.13.6",
-    "@typescript-eslint/eslint-plugin": "1.12.0",
-    "@typescript-eslint/parser": "1.12.0",
+    "@typescript-eslint/eslint-plugin": "^2.0",
+    "@typescript-eslint/parser": "^2.0",
     "ajv": "6.12.3",
     "array-move": "2.1.0",
     "async": "^2.6.4",
