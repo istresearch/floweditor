@@ -1,0 +1,27 @@
+name: "Display Build Conclusions"
+
+on:
+  repository_dispatch:
+    types:
+      - build_node_success
+      - build_node_error
+
+jobs:
+  build-node-success:
+    if: github.event.client_payload.build_msg != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Display Msg"
+        run: |-
+          echo "::notice::${{ github.event.client_payload.build_msg }}"
+  #endjob build-node-success
+
+  build-node-error:
+    if: github.event.client_payload.error_msg != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Display Err Msg"
+        run: |-
+          echo "::error::${{ github.event.client_payload.error_msg }}"
+          exit 1
+  #endjob build-node-error
