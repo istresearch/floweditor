@@ -26,7 +26,7 @@ jobs:
               "node": {
                 "version": "16.x",
                 "arch_allowed": "amd64 arm64",
-                "install.sh": "ci_yarn_install.sh",
+                "install_sh": "ci_yarn_install.sh",
                 "output_folder": "build"
               },
               "filerepo": {
