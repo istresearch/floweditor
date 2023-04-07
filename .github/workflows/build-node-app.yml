@@ -1,4 +1,4 @@
-name: build-image
+name: "Build Node Package"
 
 on:
   push:
