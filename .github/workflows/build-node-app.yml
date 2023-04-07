@@ -36,7 +36,7 @@ jobs:
               "callback": {
                 "repository": "${{ github.repository }}",
                 "event_type": "build_node_success",
-                "error_type": "build_node_error",
+                "error_type": "build_node_error"
               }
             }
   #endjob trigger-build
