@@ -5,111 +5,17 @@ on:
     tags:
       - 'v*'
 
-env:
-  NODE_VER: '16.x'
-
 jobs:
-  build_cfg:
-    runs-on: ubuntu-latest
-    environment: default
-    outputs:
-      VERSION_STR: ${{ steps.config_step.outputs.VERSION_STR }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ env.NODE_VER }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VER }}
-
-      - name: Install dependencies
-        run: |-
-          pip install virtualenv
-          virtualenv venv
-          . venv/bin/activate
-          python -m pip install --upgrade pip
-          python setup.py install
-
-      - name: "Determine Version"
-        id: config_step
-        env:
-          REF_NAME: ${{ github.event.client_payload.repo.ref_name }}
-        run: |-
-          if [[ '${{ github.event.client_payload.repo.ref_type }}' == 'tag' ]]; then
-            if [[ ${REF_NAME#*dev} != ${REF_NAME} ]]; then
-              # if the tag contains "dev", treat as a dev build
-              VERSION_STR=dev${REF_NAME#*dev}
-            fi
-          else
-            VER_BUILD=$(date +%H%M)
-            VERSION_NUM="$(date +%y).$(date +%m).$(date +%d).${VER_BUILD:0:3}"
-            VERSION_STR=dev${VERSION_NUM//.}
-          fi
-          
-          echo "::notice::Version STR=${VERSION_STR}"
-          echo "VERSION_STR=${VERSION_STR}" >> $GITHUB_OUTPUT
-  #endjob build_cfg
-
-  build-dist:
-    runs-on: ubuntu-latest
-    needs: [build_cfg, test_code]
-    environment: default
-    env:
-      VERSION_STR: ${{ needs.build_cfg.outputs.VERSION_STR }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: "Setup Python"
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VER }}
-
-      - name: "Install dependencies"
-        run: |-
-          python3 -m venv venv
-          source venv/bin/activate
-          python -m pip install --upgrade pip
-          python setup.py install
-
-      - name: "Create Dev Distribution"
-        if: needs.build_cfg.outputs.VERSION_STR != ''
-        run: |-
-          python setup.py egg_info --tag-build=${VERSION_STR} sdist
-
-      - name: "Create Prod Distribution"
-        if: needs.build_cfg.outputs.VERSION_STR == ''
-        run: |-
-          python setup.py sdist
-
-      - name: Archive build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: |-
-            dist/*.tar.gz
-  #endjob build-dist
-
-  upload_to_filerepo:
-    needs: [build-dist]
-    uses: istresearch/ci-docker/.github/workflows/util-copy-to-filerepo.yml@v1
-    secrets: inherit
-    with:
-      artifact_name: dist
-      source_filepath: "*.tar.gz"
-      dest_filepath: "/tmp/"
-      move_cmd: "cd /data/repo/pip/prod/ && ls /tmp/ | grep pyst | xargs -I '{}' sudo mv /tmp/'{}' . && sudo su ubuntu -c 'dir2pi -n .'"
-  #endjob upload_to_filerepo
   trigger-build:
     runs-on: ubuntu-latest
-    needs: [build_cfg]
     environment: default
     steps:
-      - name: Trigger Container Build
+      - name: "Trigger Node Build"
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.CI_WEBHOOK_TOKEN }}
           repository: istresearch/ci-docker
-          event-type: build-repo
+          event-type: build-node-app
           client-payload: |-
             {
               "repo": {
