@@ -1,6 +1,6 @@
 .*
 !.storybook/
-node_modules/
+node_modules*/
 umd/
 dist/
 !src/*.d.ts
@@ -12,7 +12,7 @@ stats.json
 report.html
 lambda-build
 lib
-build
+build*/
 deploy
 fabric
 fabfile.py
