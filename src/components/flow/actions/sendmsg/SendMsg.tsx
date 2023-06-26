@@ -4,14 +4,10 @@ import * as React from 'react';
 
 import styles from './SendMsg.module.scss';
 import i18n from 'config/i18n';
-import { renderAssetList } from '../helpers';
-import { AssetType } from '../../../../store/flowContext';
-import { MAX_TO_SHOW } from '../addlabels/AddLabels';
-import { fakePropType } from '../../../../config/ConfigProvider';
 
 export const PLACEHOLDER = i18n.t('actions.send_msg.placeholder', 'Send a message to the contact');
 
-const SendMsgComp: React.SFC<SendMsg> = (action: SendMsg, context: any): JSX.Element => {
+const SendMsgComp: React.SFC<SendMsg> = (action: SendMsg): JSX.Element => {
   if (action.text) {
     let replies = null;
 
@@ -40,30 +36,6 @@ const SendMsgComp: React.SFC<SendMsg> = (action: SendMsg, context: any): JSX.Ele
               {line}
             </div>
           ))}
-
-          {action.labels
-            ? renderAssetList(
-                action.labels.map(label => {
-                  if (label.name_match) {
-                    return {
-                      id: label.name_match,
-                      name: label.name_match,
-                      type: AssetType.NameMatch
-                    };
-                  }
-                  return {
-                    id: label.uuid,
-                    name: label.name,
-                    type: AssetType.Label
-                  };
-                }),
-                MAX_TO_SHOW,
-                context.config.endpoints
-              )
-            : null}
-
-          <br />
-
           {action.attachments && action.attachments.length > 0 ? (
             <div className={`${styles.attachment} fe-paperclip`} />
           ) : null}
@@ -77,10 +49,6 @@ const SendMsgComp: React.SFC<SendMsg> = (action: SendMsg, context: any): JSX.Ele
     );
   }
   return <div className="placeholder">{PLACEHOLDER}</div>;
-};
-
-SendMsgComp.contextTypes = {
-  config: fakePropType
 };
 
 export default SendMsgComp;
