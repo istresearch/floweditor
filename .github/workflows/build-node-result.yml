@@ -7,21 +7,19 @@ on:
       - build_node_error
 
 jobs:
-  build-node-success:
-    if: github.event.client_payload.build_msg != ''
+  build_result:
+    name: "Build Result [#${{ github.event.client_payload.run_number }}]"
     runs-on: ubuntu-latest
+    env:
+      RUN_URL: "[Run #${{ github.event.client_payload.run_number }}](${{ github.event.client_payload.run_url }})"
     steps:
-      - name: "Display Msg"
+      - name: "Display Error Msg"
+        if: github.event.client_payload.error_msg != ''
         run: |-
-          echo "::notice::${{ github.event.client_payload.build_msg }}"
-  #endjob build-node-success
-
-  build-node-error:
-    if: github.event.client_payload.error_msg != ''
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Display Err Msg"
-        run: |-
-          echo "::error::${{ github.event.client_payload.error_msg }}"
+          echo -e "::error::${RUN_URL}%0A${{ github.event.client_payload.error_msg }}"
           exit 1
-  #endjob build-node-error
+      - name: "Display Success Msg"
+        if: github.event.client_payload.build_msg != ''
+        run: |-
+          echo -e "::notice::${RUN_URL}%0A${{ github.event.client_payload.build_msg }}"
+  #endjob build_result
