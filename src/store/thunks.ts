@@ -796,7 +796,8 @@ export const onAddToNode = (node: FlowNode) => (
   const newAction: SendMsg = {
     uuid: createUUID(),
     type: Types.send_msg,
-    text: ''
+    text: '',
+    labels: []
   };
 
   dispatch(
