@@ -1,8 +1,9 @@
 import { default as bindCallbacks } from 'auto-bind/react';
 import * as React from 'react';
 
-// tslint:disable-next-line: no-empty-interface
-interface FixyProps {}
+interface FixyProps {
+    children?: React.ReactNode;
+}
 
 interface FixyState {
   top: number;

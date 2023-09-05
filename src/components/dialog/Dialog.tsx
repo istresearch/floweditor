@@ -41,6 +41,7 @@ export interface DialogProps {
   noPadding?: boolean;
   tabs?: Tab[];
   className?: string;
+  children?: React.ReactNode;
 }
 
 export interface DialogState {
