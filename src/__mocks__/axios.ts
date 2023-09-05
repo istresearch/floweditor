@@ -1,6 +1,7 @@
 import { config } from 'test/config';
+import { jest } from '@jest/globals'
 
-export const axios = require.requireActual('axios');
+export const axios = jest.requireActual('axios');
 
 const boringFlowResp = require('test/assets/flows/boring.json');
 const flowsResp = require('test/assets/flows.json');
@@ -32,6 +33,7 @@ const getUUIDQuery = (urlStr: string) => {
   return null;
 };
 
+// @ts-ignore
 axios.get = jest.fn((url: string) => {
   const { endpoint, containsQuery } = getEndpoint(url);
   const endpoints = config.endpoints;
