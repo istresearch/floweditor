@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { getAllErrors } from 'components/flow/actions/helpers';
 import { HeaderEntry } from 'components/flow/routers/webhook/WebhookRouterForm';
 import styles from 'components/flow/routers/webhook/WebhookRouterForm.module.scss';

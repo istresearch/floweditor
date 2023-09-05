@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { AxiosResponse } from 'axios';
 import Dialog, { ButtonSet, Tab } from 'components/dialog/Dialog';
 import { hasErrors, renderIssues } from 'components/flow/actions/helpers';

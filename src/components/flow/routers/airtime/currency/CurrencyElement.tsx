@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { AirtimeTransferEntry } from 'components/flow/routers/airtime/AirtimeRouterForm';
 import AssetSelector from 'components/form/assetselector/AssetSelector';
 import FormElement from 'components/form/FormElement';

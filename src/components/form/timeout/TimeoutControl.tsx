@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import CheckboxElement from 'components/form/checkbox/CheckboxElement';
 import * as React from 'react';
 import { renderIf } from 'utils';

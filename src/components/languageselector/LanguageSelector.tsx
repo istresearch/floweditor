@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { ConfigProviderContext } from 'config/ConfigProvider';
 import * as React from 'react';
 import { connect } from 'react-redux';

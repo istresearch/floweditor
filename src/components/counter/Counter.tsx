@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import styles from 'components/counter/Counter.module.scss';
 import * as React from 'react';
 import { addCommas } from 'utils';

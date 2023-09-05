@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import classNames from 'classnames/bind';
 import React from 'react';
 import styles from './IssuesTab.module.scss';

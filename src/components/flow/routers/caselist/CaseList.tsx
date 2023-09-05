@@ -1,5 +1,5 @@
-import arrayMove from 'array-move';
-import { react as bindCallbacks } from 'auto-bind';
+import { arrayMoveMutable as arrayMove } from 'array-move';
+import { default as bindCallbacks } from 'auto-bind/react';
 import CaseElement from 'components/flow/routers/case/CaseElement';
 import { createEmptyCase } from 'components/flow/routers/caselist/helpers';
 import { fakePropType } from 'config/ConfigProvider';

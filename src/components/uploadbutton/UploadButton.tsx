@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import axios from 'axios';
 import * as React from 'react';
 import Button, { ButtonTypes } from 'components/button/Button';

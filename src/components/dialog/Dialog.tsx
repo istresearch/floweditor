@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import Button, { ButtonProps, ButtonTypes } from 'components/button/Button';
 import shared from 'components/shared.module.scss';
 import * as React from 'react';

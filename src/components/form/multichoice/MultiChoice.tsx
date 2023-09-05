@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import * as React from 'react';
 import { StringArrayEntry, StringEntry } from 'store/nodeEditor';
 import TembaSelect from 'temba/TembaSelect';

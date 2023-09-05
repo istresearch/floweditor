@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import * as axios from 'axios';
 import { getTime, isMessage, isMT } from 'components/simulator/helpers';
 import LogEvent, { EventProps } from 'components/simulator/LogEvent';

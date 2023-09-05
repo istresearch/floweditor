@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import * as React from 'react';
 import { bool, snakify } from 'utils';
 import styles from './TembaSelect.module.scss';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './ContextExplorer.module.scss';
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import classNames from 'classnames/bind';
 import { copyToClipboard } from 'utils';
 import i18n from 'config/i18n';

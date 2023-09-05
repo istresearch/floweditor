@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import * as React from 'react';
 import Dialog, { ButtonSet } from 'components/dialog/Dialog';
 import { renderIssues } from 'components/flow/actions/helpers';

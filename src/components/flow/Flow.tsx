@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import Button from 'components/button/Button';
 import { Canvas } from 'components/canvas/Canvas';
 import { CanvasDraggableProps } from 'components/canvas/CanvasDraggable';

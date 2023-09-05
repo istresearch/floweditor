@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import FormElement, { FormElementProps } from 'components/form/FormElement';
 import * as React from 'react';
 import { StringEntry } from 'store/nodeEditor';

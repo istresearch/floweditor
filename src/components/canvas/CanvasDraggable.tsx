@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { Dimensions, FlowPosition } from 'flowTypes';
 import * as React from 'react';
 import { newPosition } from 'store/helpers';

@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import Dialog, { ButtonSet, Tab } from 'components/dialog/Dialog';
 import styles from 'components/flow/actions/action/Action.module.scss';
 import { initializeLocalizedKeyForm } from 'components/flow/actions/localization/helpers';

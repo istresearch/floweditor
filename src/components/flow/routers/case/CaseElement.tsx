@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { CaseProps } from 'components/flow/routers/caselist/CaseList';
 import { isRelativeDate } from 'components/flow/routers/helpers';
 import FormElement from 'components/form/FormElement';

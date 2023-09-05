@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { FlowDefinition, StickyNote } from 'flowTypes';
 import * as React from 'react';
 import TextareaAutosize from 'react-autosize-textarea/lib';

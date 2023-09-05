@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import Dialog, { ButtonSet, Tab } from 'components/dialog/Dialog';
 import { determineTypeConfig } from 'components/flow/helpers';
 import { LocalizationFormProps } from 'components/flow/props';

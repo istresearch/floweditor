@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { CanvasDraggable, CanvasDraggableProps } from 'components/canvas/CanvasDraggable';
 import { getDraggablesInBox, reflow } from 'components/canvas/helpers';
 import { DRAG_THRESHOLD } from 'components/flow/Flow';

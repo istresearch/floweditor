@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import { getDraggedFrom } from 'components/helpers';
 import Modal from 'components/modal/Modal';
 import { Type } from 'config/interfaces';

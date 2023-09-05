@@ -1,4 +1,4 @@
-import { react as bindCallbacks } from 'auto-bind';
+import { default as bindCallbacks } from 'auto-bind/react';
 import classNames from 'classnames/bind';
 import Counter from 'components/counter/Counter';
 import DragHelper from 'components/draghelper/DragHelper';
