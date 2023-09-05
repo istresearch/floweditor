@@ -50,7 +50,8 @@ const baseProps: ActionWrapperProps = {
   removeAction: jest.fn(),
   moveActionUp: jest.fn(),
   issues: [],
-  assetStore: null
+  assetStore: null,
+  scrollToAction: null
 };
 
 const { setup, spyOn } = composeComponentTestUtils(ActionWrapper, baseProps);
@@ -155,7 +156,7 @@ describe(ActionWrapper.name, () => {
         instance.handleActionClicked(mockEvent);
 
         expect(props.onOpenNodeEditor).toHaveBeenCalledTimes(1);
-        /* 
+        /*
                 expect(props.onOpenNodeEditor).toHaveBeenCalledWith({
                     originalNode: props.node,
                     originalAction: props.action,
