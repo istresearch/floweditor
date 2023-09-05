@@ -156,7 +156,16 @@
     "uuid": "^7.0.0"
   },
   "resolutions": {
+    "eventsource": "^1.1.1",
+    "immer": "^9.0.6",
     "jest-diff": "^25.3.0",
-    "node-fetch": "^2.6.1"
+    "json-schema": "0.4.0",
+    "loader-utils": "^1.4.1",
+    "merge-deep": "^3.0.3",
+    "minimist": "^1.2.6",
+    "node-fetch": "^2.6.1",
+    "property-expr": "^2.0.3",
+    "shell-quote": "^1.7.3",
+    "simple-git": "^3.16.0"
   }
 }
