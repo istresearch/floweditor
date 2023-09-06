@@ -24,7 +24,7 @@ jobs:
                 "ref_name": "${{ github.ref_name }}"
               },
               "node": {
-                "version": "16.x",
+                "version": "12.x",
                 "arch_allowed": "amd64 arm64",
                 "install_sh": "ci_yarn_install.sh",
                 "output_folder": "build"
