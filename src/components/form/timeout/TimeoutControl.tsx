@@ -9,6 +9,7 @@ import TembaSelect, { TembaSelectStyle } from 'temba/TembaSelect';
 import { SelectOption } from '../select/SelectElement';
 
 export const TIMEOUT_OPTIONS: SelectOption[] = [
+  { value: '1', name: i18n.t('forms.timeout_1 second', 'ASAP') },
   { value: '60', name: i18n.t('forms.timeout_1 minute', '1 minute') },
   { value: '120', name: i18n.t('forms.timeout_2 minutes', '2 minutes') },
   { value: '180', name: i18n.t('forms.timeout_3 minutes', '3 minutes') },
@@ -28,7 +29,7 @@ export const TIMEOUT_OPTIONS: SelectOption[] = [
   { value: '604800', name: i18n.t('forms.timeout_1 week', '1 week') }
 ];
 
-export const DEFAULT_TIMEOUT = TIMEOUT_OPTIONS[4];
+export const DEFAULT_TIMEOUT = TIMEOUT_OPTIONS[5];
 
 export const ellipsize = (str: string) => `${str}...`;
 
