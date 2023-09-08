@@ -9,7 +9,7 @@ import TembaSelect, { TembaSelectStyle } from 'temba/TembaSelect';
 import { SelectOption } from '../select/SelectElement';
 
 export const TIMEOUT_OPTIONS: SelectOption[] = [
-  { value: '30', name: i18n.t('forms.timeout_30 seconds', '30 seconds') },
+  { value: '1', name: i18n.t('forms.timeout_1 second', 'ASAP') },
   { value: '60', name: i18n.t('forms.timeout_1 minute', '1 minute') },
   { value: '120', name: i18n.t('forms.timeout_2 minutes', '2 minutes') },
   { value: '180', name: i18n.t('forms.timeout_3 minutes', '3 minutes') },

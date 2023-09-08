@@ -20,13 +20,13 @@ describe(TimeoutControl.name, () => {
     instance.handleChecked();
     expect(props.onChanged).toMatchCallSnapshot('check');
 
-    instance.handleTimeoutChanged(TIMEOUT_OPTIONS[0]);
+    instance.handleTimeoutChanged(TIMEOUT_OPTIONS[1]);
     expect(props.onChanged).toMatchCallSnapshot('update');
   });
 
   it('handles initial values', () => {
     const { wrapper, instance } = setup(true, {
-      timeout: { $set: parseInt(TIMEOUT_OPTIONS[0].value) },
+      timeout: { $set: parseInt(TIMEOUT_OPTIONS[1].value) },
       onChanged: setMock()
     });
 
