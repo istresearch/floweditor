@@ -156,6 +156,7 @@
     "uuid": "^7.0.0"
   },
   "resolutions": {
+    "@babel/traverse": "^7.23.2",
     "ansi-html": "0.0.8",
     "ansi-regex": "^5.0.0",
     "async": "^2.6.4",
