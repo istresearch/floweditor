@@ -10,18 +10,17 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@latest
+      - uses: actions/checkout@v3
 
       - name: "Create Version"
         id: version_cfg
         run: |-
           VER_BUILD=$(date +%-H%M)
-          #VERSION_NUM="$(date +%y).$(date +%m).$(date +%-d)-${VER_BUILD:0:3}"
           VERSION_NUM="$(date +%y).$(date +%m).$(date +%-d)-${VER_BUILD:0:3}"
           echo "VERSION_NUM=${VERSION_NUM}" >> $GITHUB_OUTPUT
 
       - name: "Tag release"
-        uses: actions/create-release@latest
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
