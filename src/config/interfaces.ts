@@ -28,7 +28,7 @@ export enum Types {
   call_classifier = 'call_classifier',
   call_resthook = 'call_resthook',
   call_webhook = 'call_webhook',
-  open_ticket = 'open_ticket',
+  //open_ticket = 'open_ticket',  PE-207: hide ticket feature
   send_msg = 'send_msg',
   send_email = 'send_email',
   send_broadcast = 'send_broadcast',
