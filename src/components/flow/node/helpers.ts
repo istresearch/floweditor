@@ -65,7 +65,9 @@ export const getVisibleActions = (renderNode: RenderNode): Action[] => {
     return renderNode.node.actions.filter((action: Action) => action.type !== Types.set_run_result);
   }
 
-  return renderNode.node.actions;
+  //return renderNode.node.actions;
+  //PE-207: hide ticket feature
+  return renderNode.node.actions.filter((action: Action) => action.type !== Types.open_ticket);
 };
 
 export const filterIssuesForAction = (
