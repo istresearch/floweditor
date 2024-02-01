@@ -11,7 +11,7 @@ jobs:
     environment: default
     steps:
       - name: "Trigger Node Build"
-        uses: peter-evans/repository-dispatch@v4
+        uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.CI_WEBHOOK_TOKEN }}
           repository: istresearch/ci-docker
