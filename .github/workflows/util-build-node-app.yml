@@ -1,0 +1,45 @@
+name: "Utility - Build Node App"
+# DESC: its own callable workflow so diff conditions can use same code.
+on:
+  workflow_call:
+    inputs:
+      version_str:
+        description: 'floweditor tag to use'
+        required: true
+        type: string
+
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest
+    environment: default
+    steps:
+      - name: "Trigger Node Build"
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CI_WEBHOOK_TOKEN }}
+          repository: istresearch/ci-docker
+          event-type: build-node-app
+          client-payload: |-
+            {
+              "repo": {
+                "name": "${{ github.repository }}",
+                "ref_type": "${{ github.ref_type }}",
+                "ref_name": "${{ github.ref_name }}"
+              },
+              "node": {
+                "version": "12.x",
+                "arch_allowed": "amd64 arm64",
+                "install_sh": "ci_yarn_install.sh",
+                "output_folder": "build"
+              },
+              "filerepo": {
+                "file_name": "floweditor-${{ inputs.version_str }}",
+                "dst_folder": "/data/repo/engage/floweditor"
+              },
+              "callback": {
+                "repository": "${{ github.repository }}",
+                "event_type": "build_node_success",
+                "error_type": "build_node_error"
+              }
+            }
+  #endjob trigger-build
