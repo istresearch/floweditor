@@ -30,3 +30,11 @@ jobs:
                 ref: 'refs/tags/v${{ steps.config_step.outputs.VERSION_STR }}',
                 sha: context.sha
             })
+
+  build_node_app:
+    needs: [build_cfg]
+    name: "Build node tarball with tag [${{ needs.build_cfg.outputs.VERSION_STR }}]"
+    uses: ./.github/workflows/util-build-node-app.yml
+    secrets: inherit
+    with:
+      version_str: ${{ needs.build_cfg.outputs.VERSION_STR }}
