@@ -31,6 +31,7 @@ jobs:
           tag_name: ${{ steps.config_step.outputs.VERSION_STR }}
           release_name: ${{ steps.config_step.outputs.VERSION_STR }}
           generate_release_notes: true
+          target_commitish: ${{ github.ref_name }}
 
   build_node_app:
     needs: [build_cfg]
