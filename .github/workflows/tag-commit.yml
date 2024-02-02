@@ -1,4 +1,4 @@
-name: tag commit
+name: "Tag Commit & Build"
 
 on:
   push:
@@ -7,12 +7,14 @@ on:
       - master
 
 jobs:
-  tag-commit:
+  build_cfg:
     runs-on: ubuntu-latest
+    outputs:
+      VERSION_STR: ${{ steps.config_step.outputs.VERSION_STR }}
     permissions: write-all
     steps:
       - name: "Create Version"
-        id: version_cfg
+        id: config_step
         run: |-
           VER_BUILD=$(date +%-H%M)
           VERSION_STR="$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
@@ -25,6 +27,14 @@ jobs:
             github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/v${{ steps.version_cfg.outputs.VERSION_STR }}',
+                ref: 'refs/tags/v${{ steps.config_step.outputs.VERSION_STR }}',
                 sha: context.sha
             })
+
+  build_node_app:
+    needs: [build_cfg]
+    name: "Build node tarball with tag [${{ needs.build_cfg.outputs.VERSION_STR }}]"
+    uses: .github/workflows/util-build-node-app.yml
+    secrets: inherit
+    with:
+      version_str: ${{ needs.build_cfg.outputs.VERSION_STR }}
