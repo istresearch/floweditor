@@ -15,7 +15,7 @@ jobs:
         id: version_cfg
         run: |-
           VER_BUILD=$(date +%-H%M)
-          VERSION_STR="$(date +%y).$(date +%m).$(date +%-d)-${VER_BUILD:0:3}"
+          VERSION_STR="$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
           echo "VERSION_STR=${VERSION_STR}" >> $GITHUB_OUTPUT
 
       - name: "Create Tag"
