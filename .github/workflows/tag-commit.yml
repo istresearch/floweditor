@@ -3,6 +3,7 @@ name: "Tag Commit & Build"
 on:
   push:
     branches-ignore:
+      - develop
       - main
       - master
 
