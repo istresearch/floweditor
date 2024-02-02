@@ -59,16 +59,23 @@ export const getResultName = (node: FlowNode) => {
   }
 };
 
+// export const getVisibleActions = (renderNode: RenderNode): Action[] => {
+//   // subflow nodes hide their set run results
+//   if (getType(renderNode) === Types.split_by_subflow) {
+//     return renderNode.node.actions.filter((action: Action) => action.type !== Types.set_run_result);
+//   }
+//
+//   return renderNode.node.actions;
+// };
+//PE-207: hide ticket feature
 export const getVisibleActions = (renderNode: RenderNode): Action[] => {
+  let actionList = renderNode.node.actions.filter((action: Action) => action.type !== Types.open_ticket);
   // subflow nodes hide their set run results
-  if (getType(renderNode) === Types.split_by_subflow) {
-    return renderNode.node.actions.filter((action: Action) => action.type !== Types.set_run_result);
+  if ( getType(renderNode) === Types.split_by_subflow ) {
+    actionList = actionList.filter((action: Action) => action.type !== Types.set_run_result);
   }
-
-  //return renderNode.node.actions;
-  //PE-207: hide ticket feature
-  return renderNode.node.actions.filter((action: Action) => action.type !== Types.open_ticket);
-};
+  return actionList;
+}
 
 export const filterIssuesForAction = (
   nodeUUID: string,
