@@ -380,7 +380,8 @@ export const typeConfigList: Type[] = [
     localizeableKeys: ['exits'],
     component: OpenTicketComp,
     aliases: [Types.split_by_ticket],
-    visibility: VISIBILITY_ONLINE,
+    //visibility: VISIBILITY_ONLINE,
+    visibility: VISIBILITY_HIDDEN,
     filter: FeatureFilter.HAS_TICKETER
   },
   {
