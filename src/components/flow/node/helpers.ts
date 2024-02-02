@@ -69,13 +69,15 @@ export const getResultName = (node: FlowNode) => {
 // };
 //PE-207: hide ticket feature
 export const getVisibleActions = (renderNode: RenderNode): Action[] => {
-  let actionList = renderNode.node.actions.filter((action: Action) => action.type !== Types.open_ticket);
+  let actionList = renderNode.node.actions.filter(
+    (action: Action) => action.type !== Types.open_ticket
+  );
   // subflow nodes hide their set run results
-  if ( getType(renderNode) === Types.split_by_subflow ) {
+  if (getType(renderNode) === Types.split_by_subflow) {
     actionList = actionList.filter((action: Action) => action.type !== Types.set_run_result);
   }
   return actionList;
-}
+};
 
 export const filterIssuesForAction = (
   nodeUUID: string,
