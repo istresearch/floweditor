@@ -6,37 +6,22 @@ on:
       - 'v*'
 
 jobs:
-  trigger-build:
+  build_cfg:
     runs-on: ubuntu-latest
-    environment: default
+    env:
+      VERSION_STR: ${{ github.ref_name }}
+    outputs:
+      VERSION_STR: ${{ steps.config_step.outputs.VERSION_STR }}
     steps:
-      - name: "Trigger Node Build"
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.CI_WEBHOOK_TOKEN }}
-          repository: istresearch/ci-docker
-          event-type: build-node-app
-          client-payload: |-
-            {
-              "repo": {
-                "name": "${{ github.repository }}",
-                "ref_type": "${{ github.ref_type }}",
-                "ref_name": "${{ github.ref_name }}"
-              },
-              "node": {
-                "version": "12.x",
-                "arch_allowed": "amd64 arm64",
-                "install_sh": "ci_yarn_install.sh",
-                "output_folder": "build"
-              },
-              "filerepo": {
-                "file_name": "floweditor-${{ github.ref_name }}",
-                "dst_folder": "/data/repo/engage/floweditor"
-              },
-              "callback": {
-                "repository": "${{ github.repository }}",
-                "event_type": "build_node_success",
-                "error_type": "build_node_error"
-              }
-            }
-  #endjob trigger-build
+      - name: "Get Version STR"
+        id: config_step
+        run: |-
+          echo "VERSION_STR=${VERSION_STR}" >> $GITHUB_OUTPUT
+
+  build_node_app:
+    needs: [build_cfg]
+    name: "Build node tarball with tag [${{ needs.build_cfg.outputs.VERSION_STR }}]"
+    uses: ./.github/workflows/util-build-node-app.yml
+    secrets: inherit
+    with:
+      version_str: ${{ needs.build_cfg.outputs.VERSION_STR }}

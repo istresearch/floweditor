@@ -1,0 +1,42 @@
+name: "Tag Commit & Build"
+
+on:
+  push:
+    branches-ignore:
+      - develop
+      - main
+      - master
+
+jobs:
+  build_cfg:
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION_STR: ${{ steps.config_step.outputs.VERSION_STR }}
+    permissions: write-all
+    steps:
+      - name: "Create Version"
+        id: config_step
+        run: |-
+          VER_BUILD=$(date +%-H%M)
+          VERSION_STR="v$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
+          echo "VERSION_STR=${VERSION_STR}" >> $GITHUB_OUTPUT
+          echo "::notice::Version STR=${VERSION_STR}"
+
+      - name: "Create Tag"
+        uses: actions/github-script@v7
+        with:
+          script: |-
+            github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'refs/tags/${{ steps.config_step.outputs.VERSION_STR }}',
+                sha: context.sha
+            })
+
+  build_node_app:
+    needs: [build_cfg]
+    name: "Build node tarball with tag [${{ needs.build_cfg.outputs.VERSION_STR }}]"
+    uses: ./.github/workflows/util-build-node-app.yml
+    secrets: inherit
+    with:
+      version_str: ${{ needs.build_cfg.outputs.VERSION_STR }}
