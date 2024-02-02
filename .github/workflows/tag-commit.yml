@@ -1,0 +1,30 @@
+name: tag commit
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+
+jobs:
+  tag-commit:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: "Create Version"
+        id: version_cfg
+        run: |-
+          VER_BUILD=$(date +%-H%M)
+          VERSION_STR="$(date +%y).$(date +%m).$(date +%-d)-${VER_BUILD:0:3}"
+          echo "VERSION_STR=${VERSION_STR}" >> $GITHUB_OUTPUT
+
+      - name: "Create Tag"
+        uses: actions/github-script@v7
+        with:
+          script: |-
+            github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: 'refs/tags/v${{ steps.version_cfg.outputs.VERSION_STR }}',
+                sha: context.sha
+            })
