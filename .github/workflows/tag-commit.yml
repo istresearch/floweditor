@@ -17,7 +17,7 @@ jobs:
         id: config_step
         run: |-
           VER_BUILD=$(date +%-H%M)
-          VERSION_STR="$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
+          VERSION_STR="v$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
           echo "VERSION_STR=${VERSION_STR}" >> $GITHUB_OUTPUT
           echo "::notice::Version STR=${VERSION_STR}"
 
@@ -28,7 +28,7 @@ jobs:
             github.rest.git.createRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                ref: 'refs/tags/v${{ steps.config_step.outputs.VERSION_STR }}',
+                ref: 'refs/tags/${{ steps.config_step.outputs.VERSION_STR }}',
                 sha: context.sha
             })
 

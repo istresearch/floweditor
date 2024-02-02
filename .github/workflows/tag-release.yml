@@ -16,7 +16,7 @@ jobs:
         id: version_cfg
         run: |-
           VER_BUILD=$(date +%-H%M)
-          VERSION_NUM="$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
+          VERSION_NUM="v$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
           echo "VERSION_NUM=${VERSION_NUM}" >> $GITHUB_OUTPUT
 
       - name: "Tag release"
@@ -24,7 +24,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version_cfg.outputs.VERSION_NUM }}
-          release_name: v${{ steps.version_cfg.outputs.VERSION_NUM }}
+          tag_name: ${{ steps.version_cfg.outputs.VERSION_NUM }}
+          release_name: ${{ steps.version_cfg.outputs.VERSION_NUM }}
           draft: false
           prerelease: false

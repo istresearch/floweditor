@@ -12,8 +12,6 @@ jobs:
   trigger-build:
     runs-on: ubuntu-latest
     environment: default
-    env:
-      VERSION_STR: ${{ inputs.version_str }}
     steps:
       - name: "Trigger Node Build"
         uses: peter-evans/repository-dispatch@v3
@@ -35,7 +33,7 @@ jobs:
                 "output_folder": "build"
               },
               "filerepo": {
-                "file_name": "floweditor-v${VERSION_STR#v}",
+                "file_name": "floweditor-${{ inputs.version_str }}",
                 "dst_folder": "/data/repo/engage/floweditor"
               },
               "callback": {
