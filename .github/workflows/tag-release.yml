@@ -7,24 +7,35 @@ on:
       - master
 
 jobs:
-  create-release:
+  build_cfg:
     runs-on: ubuntu-latest
+    outputs:
+      VERSION_STR: ${{ steps.config_step.outputs.VERSION_STR }}
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: "Create Version"
-        id: version_cfg
+      - name: "Create Version STR"
+        id: config_step
         run: |-
           VER_BUILD=$(date +%-H%M)
-          VERSION_NUM="v$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
-          echo "VERSION_NUM=${VERSION_NUM}" >> $GITHUB_OUTPUT
+          VERSION_STR="v$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
+          echo "VERSION_STR=${VERSION_STR}" >> $GITHUB_OUTPUT
 
-      - name: "Tag release"
-        uses: actions/create-release@v1
+      - name: "Create Release"
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.version_cfg.outputs.VERSION_NUM }}
-          release_name: ${{ steps.version_cfg.outputs.VERSION_NUM }}
-          draft: false
-          prerelease: false
+          tag_name: ${{ steps.config_step.outputs.VERSION_STR }}
+          release_name: ${{ steps.config_step.outputs.VERSION_STR }}
+          generate_release_notes: true
+
+  build_node_app:
+    needs: [build_cfg]
+    name: "Build node tarball with tag [${{ needs.build_cfg.outputs.VERSION_STR }}]"
+    uses: ./.github/workflows/util-build-node-app.yml
+    secrets: inherit
+    with:
+      version_str: ${{ needs.build_cfg.outputs.VERSION_STR }}

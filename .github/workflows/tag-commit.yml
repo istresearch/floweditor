@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       VERSION_STR: ${{ steps.config_step.outputs.VERSION_STR }}
-    permissions: write-all
+    permissions:
+      contents: write
     steps:
       - name: "Create Version"
         id: config_step
