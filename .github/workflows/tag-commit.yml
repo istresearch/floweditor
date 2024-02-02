@@ -19,6 +19,7 @@ jobs:
           VER_BUILD=$(date +%-H%M)
           VERSION_STR="$(date +%y).$(date +%-m).$(date +%-d)-${VER_BUILD:0:3}"
           echo "VERSION_STR=${VERSION_STR}" >> $GITHUB_OUTPUT
+          echo "::notice::Version STR=${VERSION_STR}"
 
       - name: "Create Tag"
         uses: actions/github-script@v7
