@@ -24,7 +24,7 @@ window.showFlowEditor = (ele, config) => {
     setHTTPTimeout(config.httpTimeout);
   }
   //<*((==<
-  if (config.schemes) {
+  if (Array.isArray(config.schemes)) {
     SCHEMES.concat(config.schemes);
   }
 
