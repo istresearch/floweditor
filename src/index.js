@@ -25,7 +25,7 @@ window.showFlowEditor = (ele, config) => {
   }
   //<*((==<
   if (Array.isArray(config.schemes)) {
-    SCHEMES.concat(config.schemes);
+    SCHEMES = SCHEMES.concat(config.schemes);
   }
 
   ReactDOM.render(<FlowEditor config={config} />, ele);
