@@ -1,6 +1,6 @@
 import { Methods } from 'components/flow/routers/webhook/helpers';
 import { FlowTypes, Operators, Types, ContactStatus } from 'config/interfaces';
-import {Scheme} from "./config/typeConfigs";
+import { Scheme } from './config/typeConfigs';
 
 // we don't concern ourselves with patch versions
 export const SPEC_VERSION = '13.1';

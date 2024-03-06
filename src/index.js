@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 
 import * as serviceWorker from './serviceWorker';
 import { setHTTPTimeout } from 'external';
-import {SCHEMES} from "./config/typeConfigs";
+import { SCHEMES } from './config/typeConfigs';
 
 // bring in our temba-components if they aren't already registered
 var componentsExist =
@@ -24,7 +24,7 @@ window.showFlowEditor = (ele, config) => {
     setHTTPTimeout(config.httpTimeout);
   }
   //<*((==<
-  if ( config.schemes ) {
+  if (config.schemes) {
     SCHEMES.concat(config.schemes);
   }
 
