@@ -88,7 +88,7 @@ export interface Scheme {
   excludeFromSplit?: boolean;
 }
 
-export const SCHEMES: Scheme[] = [
+export const DEFAULT_SCHEMES: Scheme[] = [
   {
     scheme: 'tel',
     name: i18n.t('schemes.phone.name', 'SMS'),
@@ -162,6 +162,8 @@ export const SCHEMES: Scheme[] = [
     path: i18n.t('schemes.external.path', 'External ID')
   }
 ];
+//<*((==<
+export var SCHEMES: Scheme[] = DEFAULT_SCHEMES;
 
 export const typeConfigList: Type[] = [
   {
