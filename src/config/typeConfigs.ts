@@ -164,6 +164,9 @@ export const DEFAULT_SCHEMES: Scheme[] = [
 ];
 //<*((==<
 export var SCHEMES: Scheme[] = DEFAULT_SCHEMES;
+export const concatSCHEMES = (schemes: Scheme[]) => {
+    SCHEMES = SCHEMES.concat(schemes);
+};
 
 export const typeConfigList: Type[] = [
   {
