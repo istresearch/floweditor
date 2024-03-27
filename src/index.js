@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom';
 
 import * as serviceWorker from './serviceWorker';
 import { setHTTPTimeout } from 'external';
+import { concatSCHEMES } from './config/typeConfigs';
 
 // bring in our temba-components if they aren't already registered
 var componentsExist =
@@ -21,6 +22,10 @@ if (!componentsExist) {
 window.showFlowEditor = (ele, config) => {
   if (config.httpTimeout) {
     setHTTPTimeout(config.httpTimeout);
+  }
+  //<*((==<
+  if (Array.isArray(config.schemes)) {
+    concatSCHEMES(config.schemes);
   }
 
   ReactDOM.render(<FlowEditor config={config} />, ele);
