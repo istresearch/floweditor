@@ -2,7 +2,7 @@ import './global.module.scss';
 import 'static/fonts/floweditor/style.css';
 
 import FlowEditor from 'components';
-import React, { useRef } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as serviceWorker from './serviceWorker';
@@ -28,8 +28,8 @@ window.showFlowEditor = (ele, config) => {
     concatSCHEMES(config.schemes);
   }
   //<*((==<  return the instance reference
-  const theFlowEditor = useRef(null);
-  ReactDOM.render(<FlowEditor config={config} ref={{ theFlowEditor }} />, ele);
+  let theFlowEditor;
+  ReactDOM.render(<FlowEditor config={config} ref={el => (theFlowEditor = el)} />, ele);
   return theFlowEditor;
 };
 
