@@ -23,12 +23,14 @@ window.showFlowEditor = (ele, config) => {
   if (config.httpTimeout) {
     setHTTPTimeout(config.httpTimeout);
   }
-  //<*((==<
+  //<*((==<  pass in extra schemes
   if (Array.isArray(config.schemes)) {
     concatSCHEMES(config.schemes);
   }
-
-  return ReactDOM.render(<FlowEditor config={config} />, ele);
+  //<*((==<  return the instance reference
+  const theFlowEditor = userRef(null);
+  ReactDOM.render(<FlowEditor config={config} ref={{theFlowEditor}} />, ele);
+  return theFlowEditor;
 };
 
 // If you want your app to work offline and load faster, you can change
