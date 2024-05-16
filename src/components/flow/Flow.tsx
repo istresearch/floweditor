@@ -114,7 +114,7 @@ export const getDragStyle = (drag: DragSelection) => {
 };
 
 export class Flow extends React.PureComponent<FlowStoreProps, {}> {
-  private Plumber: Plumber;
+  public Plumber: Plumber;
   private nodeContainerUUID: string;
 
   // Refs
@@ -377,7 +377,7 @@ export class Flow extends React.PureComponent<FlowStoreProps, {}> {
     );
   }
 
-  /* 
+  /*
   public componentDidUpdate(prevProps: FlowStoreProps): void {
     traceUpdate(this, prevProps);
   }
