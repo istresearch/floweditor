@@ -28,7 +28,7 @@ window.showFlowEditor = (ele, config) => {
     concatSCHEMES(config.schemes);
   }
 
-  ReactDOM.render(<FlowEditor config={config} />, ele);
+  return ReactDOM.render(<FlowEditor config={config} />, ele);
 };
 
 // If you want your app to work offline and load faster, you can change
