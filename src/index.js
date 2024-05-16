@@ -29,7 +29,7 @@ window.showFlowEditor = (ele, config) => {
   }
   //<*((==<  return the instance reference
   let theFlowEditor;
-  ReactDOM.render(<FlowEditor config={config} ref={ el => theFlowEditor = el } />, ele);
+  ReactDOM.render(<FlowEditor config={config} ref={el => (theFlowEditor = el)} />, ele);
   return theFlowEditor;
 };
 
